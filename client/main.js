@@ -14,6 +14,7 @@ function bindHandlers(){
     });
 
     $('.highScores').click(function(){
+        
         $('.gameScreen').html(render('highScores', {names: ["Justin", "Dallin", "Tarah"]}));
         bindHandlers();
     });
