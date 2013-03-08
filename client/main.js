@@ -1,8 +1,13 @@
 window.require = require;
 var render = require('./requires/render');
+var scores = undefined;
 
 $('.gameScreen').html(render('mainMenu'));
 bindHandlers();
+
+$.get('/getHighScores', function(data){
+    scores = JSON.parse(data);
+});
 
 
 function bindHandlers(){
@@ -15,7 +20,7 @@ function bindHandlers(){
 
     $('.highScores').click(function(){
         
-        $('.gameScreen').html(render('highScores', {names: ["Justin", "Dallin", "Tarah"]}));
+        $('.gameScreen').html(render('highScores', {hsScores: scores}));
         bindHandlers();
     });
 

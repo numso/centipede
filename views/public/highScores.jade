@@ -1,7 +1,7 @@
 h1(style = 'color: white; text-align: center;') High Scores
 .highScoreWrapper(style = 'text-align: center')
 
-    each name, i in names
-        .thisName(style = 'color:white;')= (i+1) + ". " + name
+    each scores, i in hsScores
+        .thisName(style = 'color:white;')= (i+1) + ". " + scores.name
 
 .back.menuButton Back
