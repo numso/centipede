@@ -1,0 +1,7 @@
+.scoresWrapper
+  h1(style = 'color: white; text-align: center;') High Scores
+
+  each name, i in names
+    .thisName(style = 'color:white;')= (i+1) + ". " + name
+
+  .button.back Back
