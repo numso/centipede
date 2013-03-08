@@ -1,7 +1,11 @@
+
 .scoresWrapper
   h1 High Scores
 
-  each scores, i in hsScores
-    .thisName= (i + 1) + ". " + scores.name
+  .all-scores
+    if !loaded
+      .loading show loading screen
+    else
+      include components/scores-table
 
   .button.back Back

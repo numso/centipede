@@ -28,7 +28,7 @@ function init() {
   shared.setState(states.menu);
 
   // set up the context
-  var canvas = document.getElementById('#game');
+  var canvas = document.getElementById('game');
   ctx = canvas.getContext('2d');
 
   // set up the time
@@ -41,6 +41,10 @@ function init() {
 function getScores() {
   $.get('/getHighScores', function (data) {
     shared.scores = JSON.parse(data);
+
+    // if, bychance, the scores page was shown before scores were loaded, show them now
+    var scores = render('components/scores-table', { hsScores: shared.scores });
+    $('.scoresWrapper .allScores').html(scores);
   });
 };
 

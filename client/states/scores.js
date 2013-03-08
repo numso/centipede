@@ -3,7 +3,10 @@ var render = require('../requires/render')
   ;
 
 function start() {
-  $('.gameScreen').html(render('scores', { hsScores: shared.scores }));
+
+  var loaded = !!shared.scores.length;
+
+  $('.gameScreen').html(render('scores', { loaded: loaded, hsScores: shared.scores }));
   shared.bindBackButton();
 };
 

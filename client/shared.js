@@ -25,4 +25,4 @@ exports.bindBackButton = bindBackButton;
 exports.getState       = getState;
 exports.setState       = setState;
 exports.nop            = nop;
-exports.scores         = undefined;
+exports.scores         = [];
