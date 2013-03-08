@@ -1,6 +1,6 @@
 window.require = require;
 
-var render = require('./requires/render')
+var jadify = require('./requires/render')
   , shared = require('./shared')
   ;
 
@@ -43,7 +43,7 @@ function getScores() {
     shared.scores = JSON.parse(data);
 
     // if, bychance, the scores page was shown before scores were loaded, show them now
-    var scores = render('components/scores-table', { hsScores: shared.scores });
+    var scores = jadify('components/scores-table', { hsScores: shared.scores });
     $('.scoresWrapper .allScores').html(scores);
   });
 };

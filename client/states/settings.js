@@ -1,9 +1,9 @@
-var render = require('../requires/render')
+var jadify = require('../requires/render')
   , shared = require('../shared')
   ;
 
 function start() {
-  $('.gameScreen').html(render('settings'));
+  $('.gameScreen').html(jadify('settings'));
   shared.bindBackButton();
 };
 

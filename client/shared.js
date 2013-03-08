@@ -1,6 +1,4 @@
-var render = require('./requires/render')
-  , menu   = require('./states/menu')
-  ;
+var menu   = require('./states/menu');
 
 var state = { stop: nop };
 

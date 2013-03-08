@@ -1,4 +1,4 @@
-var render = require('../requires/render')
+var jadify = require('../requires/render')
   , shared = require('../shared')
   ;
 
@@ -10,7 +10,7 @@ var game       = require('./game')
   ;
 
 function start() {
-  $('.gameScreen').html(render('menu'));
+  $('.gameScreen').html(jadify('menu'));
   bindHandlers();
 };
 
