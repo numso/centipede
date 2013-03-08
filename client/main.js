@@ -4,10 +4,6 @@ var render = require('./requires/render')
   , shared = require('./shared')
   ;
 
-$.get('/getHighScores', function(data){
-  shared.scores = JSON.parse(data);
-});
-
 // Load all the states
 var states = {
   menu:     require('./states/menu'),
@@ -17,14 +13,35 @@ var states = {
   settings: require('./states/settings')
 };
 
+var lastTime, ctx;
+
 function init() {
-  window.requestAnimationFrame = window.requestAnimationFrame; // FIX THIS
+  window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (cb) { window.setTimeout(cb, 1000 / 60); };
+
+  // get the high scores from the server
+  getScores();
+
+  // initialize all the states
   initStates();
 
   // set the current state
   shared.setState(states.menu);
 
+  // set up the context
+  var canvas = document.getElementById('#game');
+  ctx = canvas.getContext('2d');
+
+  // set up the time
+  lastTime = Date.now();
+
+  // start the game loop
   requestAnimationFrame(gameLoop);
+};
+
+function getScores() {
+  $.get('/getHighScores', function (data) {
+    shared.scores = JSON.parse(data);
+  });
 };
 
 function initStates() {
@@ -40,13 +57,17 @@ function initStates() {
 };
 
 function gameLoop() {
+  // request to be called again in the next animation loop
+  // this needs to be done first to support older browsers
   requestAnimationFrame(gameLoop);
 
-  // MANAGE THE TIMES
-  shared.getState().update();
+  // get the time difference, but cap it at 20ms
+  var curTime = Date.now()
+    , dTime   = curTime - lastTime;
+  if (dTime > 20) dTime = 20;
 
-  // GRAB THE CONTEXT
-  shared.getState().render();
+  shared.getState().update(dTime);
+  shared.getState().render(ctx);
 };
 
 init();
