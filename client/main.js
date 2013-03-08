@@ -4,6 +4,12 @@ var render = require('./requires/render')
   , shared = require('./shared')
   ;
 
+var scores = undefined;
+
+$.get('/getHighScores', function(data){
+  scores = JSON.parse(data);
+});
+
 // Load all the states
 var states = {
   menu:     require('./states/menu'),

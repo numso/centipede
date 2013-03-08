@@ -3,7 +3,7 @@ var render = require('../requires/render')
   ;
 
 function start() {
-  $('.gameScreen').html(render('scores', {names: ["Justin", "Dallin", "Tarah"]}));
+  $('.gameScreen').html(render('scores', { hsScores: scores }));
   shared.bindBackButton();
 };
 
