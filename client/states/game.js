@@ -7,6 +7,8 @@ var jadify = require('../requires/render')
 var characters = [];
 var bullets = [];
 var mushrooms = [];
+var poison = [];
+var spider, scorpion;
 
 function start() {
   $('.gameScreen').html(jadify('game'));
@@ -14,7 +16,7 @@ function start() {
 };
 
 function init(){
-       characters.push({
+    characters.push({
         width: 30,
         height: 50,
         x: 0,
@@ -22,6 +24,25 @@ function init(){
         dx: .1,
         dy: .1
    });
+
+    spider = {
+        visible: true,
+        width: 40,
+        height: 40,
+        x: 1,
+        y: 550,
+        dx: .2,
+        dy: .2
+    };
+
+    scorpion = {
+        visible: true,
+        width: 20,
+        height: 20,
+        x: 1,
+        y: Math.floor(Math.random() * 600),
+        dx: .1
+    };
 
        placeMushrooms();
 };
@@ -56,11 +77,42 @@ function update(dTime){
     for(var n = 0; n < bullets.length; ++n)
         {
             bullets[n].y -= bullets[n].dy * dTime;
-            if(checkCollision(bullets[n]))
+            if(checkCollisionSpider(bullets[n]))
                 {
                     bullets.splice(n, 1);
                     --n;
                 }
+            if(checkCollisionScorpion(bullets[n]))
+                {
+                    bullets.splice(n, 1);
+                    --n;
+            if(checkMushroomCollision(bullets[n]))
+                {
+                    bullets.splice(n, 1);
+                    --n;
+                }
+        }
+
+    //scorpion position
+    if(scorpion.x > 0 && scorpion.x < (500 - scorpion.width))
+        {
+            scorpion.x += scorpion.dx * dTime;
+            checkPoison(scorpion);
+        }
+    else
+    {
+        scorpion.dx *= -1;
+        scorpion.x += scorpion.dx * dTime;
+        scorpion.y = Math.floor(Math.random() * 700 - scorpion.height);
+    }
+
+    //spider position
+    if(spider.x > 0 && spider.x < (500 - spider.width))
+        spider.x += spider.dx * dTime;
+    else
+        {
+            spider.dx *= -1;
+            spider.x += spider.dx * dTime;
         }
 };
 
@@ -74,7 +126,7 @@ function addBullet(thisChar){
     });
 };
 
-function checkCollision(thisBullet){
+function checkMushroomCollision(thisBullet){
     for(var n = 0; n < mushrooms.length; ++n)
     {
         if(thisBullet.x > mushrooms[n].x && thisBullet.x < mushrooms[n].x + mushrooms[n].width)
@@ -87,7 +139,42 @@ function checkCollision(thisBullet){
                 }
 
     }
+
     return false;
+};
+
+function checkCollisionSpider(thisBullet){
+    if(thisBullet.x > spider.x && thisBullet.x < spider.x + spider.width)
+        if(thisBullet.y < spider.y + spider.height)
+            {
+                spider.visible = false;
+                return true;
+            }
+
+    return false;
+};
+
+function checkCollisionScorpion(thisBullet){
+    if(thisBullet.x > scorpion.x && thisBullet.x < scorpion.x + scorpion.width)
+        if(thisBullet.y < scorpion.y + scorpion.height)
+            {
+                scorpion.visible = false;
+                return true;
+            }
+
+    return false;
+};
+
+function checkPoison(thisScorpion){
+    for(var n = 0; n < mushrooms.length; ++n)
+    {
+        if( mushrooms[n].x < thisScorpion.x + thisScorpion.width && thisScorpion.x < mushrooms[n].x + mushrooms[n].width)
+            if(mushrooms[n].y < thisScorpion.y + thisScorpion.height && thisScorpion.y < mushrooms[n].y + mushrooms[n].height)
+            {
+                poison.push(mushrooms[n]);
+                mushrooms.splice(n, 1);
+            }
+    }
 };
 
 function render(ctx){
@@ -99,6 +186,13 @@ function render(ctx){
         g.drawBullet(ctx, bullets[n].x, bullets[n].y);
     for(var n = 0; n < mushrooms.length; ++n)
         g.drawMushrooms(mushrooms[n].size, ctx, mushrooms[n].x, mushrooms[n].y);
+    for(var n = 0; n < poison.length; ++n)
+        g.drawPoison(poison[n].size, ctx, poison[n].x, poison[n].y);
+
+    if(scorpion.visible)
+        g.drawScorpion(ctx, scorpion.x, scorpion.y);
+    if(spider.visible)
+        g.drawSpider(ctx, spider.x, spider.y);
 };
 
 exports.start = start;
