@@ -2,6 +2,7 @@ window.require = require;
 
 var jadify = require('./requires/render')
   , shared = require('./shared')
+  , g = require('./graphics')
   ;
 
 // Load all the states
@@ -18,6 +19,7 @@ var lastTime, ctx;
 function init() {
   window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (cb) { window.setTimeout(cb, 1000 / 60); };
 
+  g.init();
   // get the high scores from the server
   getScores();
 
@@ -28,7 +30,7 @@ function init() {
   shared.setState(states.menu);
 
   // set up the context
-  var canvas = document.getElementById('game');
+  var canvas = document.getElementById('myGame');
   ctx = canvas.getContext('2d');
 
   // set up the time
