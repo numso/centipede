@@ -19,9 +19,14 @@ var lastTime, ctx;
 function init() {
   window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (cb) { window.setTimeout(cb, 1000 / 60); };
 
+  // initialize the graphics object
   g.init();
+
   // get the high scores from the server
   getScores();
+
+  // bind all the buttons
+  bindHandlers();
 
   // initialize all the states
   initStates();
@@ -38,17 +43,16 @@ function init() {
 
   // start the game loop
   requestAnimationFrame(gameLoop);
-};
+}
 
 function getScores() {
   $.get('/getHighScores', function (data) {
     shared.scores = JSON.parse(data);
 
-    // if, bychance, the scores page was shown before scores were loaded, show them now
     var scores = jadify('components/scores-table', { hsScores: shared.scores });
-    $('.scoresWrapper .allScores').html(scores);
+    $('.scoresWrapper .all-scores').html(scores);
   });
-};
+}
 
 function initStates() {
   for (var state in states) {
@@ -60,7 +64,34 @@ function initStates() {
 
     states[state].init();
   }
-};
+}
+
+function bindHandlers() {
+  $('#game').click(function () {
+    shared.setState(states.game);
+  });
+
+  $('#scores').click(function () {
+    shared.setState(states.scores);
+  });
+
+  $('#credits').click(function () {
+    shared.setState(states.credits);
+  });
+
+  $('#settings').click(function () {
+    shared.setState(states.settings);
+  });
+
+  $('#exit').click(function () {
+    window.open('', '_self', '');
+    window.close();
+  });
+
+  $('.back').click(function () {
+    shared.setState(states.menu);
+  });
+}
 
 function gameLoop() {
   // request to be called again in the next animation loop
@@ -74,6 +105,6 @@ function gameLoop() {
 
   shared.getState().update(dTime);
   shared.getState().render(ctx);
-};
+}
 
 init();

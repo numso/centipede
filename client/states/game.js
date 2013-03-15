@@ -202,3 +202,5 @@ exports.start = start;
 exports.update = update;
 exports.render = render;
 exports.init = init;
+exports.str = 'slide-game';
+
