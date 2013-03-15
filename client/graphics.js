@@ -38,6 +38,13 @@ function drawPoison(num, ctx, x, y){
         ctx.drawImage(spriteSheet, 150, 50, 50, 50, x, y, 20, 20);
 };
 
+function drawCentipede(type, ctx, x, y){
+    if(type == 'head')
+        ctx.drawImage(spriteSheet, 150, 100, 50, 50, x, y, 20, 20);
+    if(type == 'body')
+        ctx.drawImage(spriteSheet, 150, 150, 50, 50, x, y, 20, 20);
+};
+
 function init(){
     spriteSheet = document.createElement('img');
     spriteSheet.src = '/img/spriteSheet.png';
@@ -49,4 +56,5 @@ exports.drawMushrooms = drawMushrooms;
 exports.drawSpider =    drawSpider;
 exports.drawPoison =    drawPoison;
 exports.drawScorpion =  drawScorpion;
+exports.drawCentipede = drawCentipede;
 exports.init =          init;
