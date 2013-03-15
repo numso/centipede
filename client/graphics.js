@@ -28,13 +28,13 @@ function drawScorpion(ctx, x, y){
 };
 
 function drawPoison(num, ctx, x, y){
-    if(num = 4)
+    if(num == 4)
         ctx.drawImage(spriteSheet, 0, 50, 50, 50, x, y, 20, 20);
-    if(num = 3)
+    if(num == 3)
         ctx.drawImage(spriteSheet, 100, 50, 50, 50, x, y, 20, 20);
-    if(num = 2)
+    if(num == 2)
         ctx.drawImage(spriteSheet, 50, 50, 50, 50, x, y, 20, 20);
-    if(num = 1)
+    if(num == 1)
         ctx.drawImage(spriteSheet, 150, 50, 50, 50, x, y, 20, 20);
 };
 

@@ -2,6 +2,8 @@ var jadify = require('../requires/render')
   , shared = require('../shared')
   , g = require('../graphics')
   , inp = require('../input')
+  , snd = require('../sounds')
+  , collision = require('../collision')
   ;
 
 var characters = [];
@@ -13,6 +15,7 @@ var spider, scorpion;
 function start() {
   $('.gameScreen').html(jadify('game'));
   shared.bindBackButton();
+  //snd.playMusic();
 };
 
 function init(){
@@ -71,23 +74,35 @@ function update(dTime){
             characters[n].y += characters[n].dy * dTime;
         if(inp.fire())
             addBullet(characters[n]);
+        if(collision.isDead(scorpion, spider, characters[n]))
+            {
+                console.log("your dead dude");
+                //snd.stopMusic();
+            }
     }
 
     //bullet position
     for(var n = 0; n < bullets.length; ++n)
         {
             bullets[n].y -= bullets[n].dy * dTime;
-            if(checkCollisionSpider(bullets[n]) && scorpion.visible)
+            if(collision.Spider(spider, bullets[n]) && spider.visible)
+                {
+                    spider.visible = false;
+                    bullets.splice(n, 1);
+                    --n;
+                }
+            if(collision.Scorpion(scorpion, bullets[n]) && scorpion.visible)
+                {
+                    scorpion.visible = false;
+                    bullets.splice(n, 1);
+                    --n;
+                }
+            if(collision.Mush(mushrooms, bullets[n]))
                 {
                     bullets.splice(n, 1);
                     --n;
                 }
-            if(checkCollisionScorpion(bullets[n]) && scorpion.visible)
-                {
-                    bullets.splice(n, 1);
-                    --n;
-                }
-            if(checkMushroomCollision(bullets[n]))
+            if(collision.Poison(poison, bullets[n]))
                 {
                     bullets.splice(n, 1);
                     --n;
@@ -99,7 +114,7 @@ function update(dTime){
         if(scorpion.x > 0 && scorpion.x < (500 - scorpion.width))
             {
                 scorpion.x += scorpion.dx * dTime;
-                checkPoison(scorpion);
+                collision.checkPoison(mushrooms, poison, scorpion);
             }
         else
         {
@@ -110,7 +125,7 @@ function update(dTime){
     }
 
     //spider position
-    if(scorpion.visible){
+    if(spider.visible){
         if(spider.x > 0 && spider.x < (500 - spider.width))
             spider.x += spider.dx * dTime;
         else
@@ -131,54 +146,6 @@ function addBullet(thisChar){
     });
 };
 
-function checkMushroomCollision(thisBullet){
-    for(var n = 0; n < mushrooms.length; ++n)
-    {
-        if(thisBullet.x > mushrooms[n].x && thisBullet.x < mushrooms[n].x + mushrooms[n].width)
-            if(thisBullet.y < mushrooms[n].y + mushrooms[n].height)
-                {
-                    --mushrooms[n].size;
-                    if(mushrooms[n].size == 0)
-                        mushrooms.splice(n, 1);
-                    return true;
-                }
-    }
-    return false;
-};
-
-function checkCollisionSpider(thisBullet){
-    if(thisBullet.x > spider.x && thisBullet.x < spider.x + spider.width)
-        if(thisBullet.y < spider.y + spider.height)
-            {
-                spider.visible = false;
-                return true;
-            }
-
-    return false;
-};
-
-function checkCollisionScorpion(thisBullet){
-    if(thisBullet.x > scorpion.x && thisBullet.x < scorpion.x + scorpion.width)
-        if(thisBullet.y < scorpion.y + scorpion.height)
-            {
-                scorpion.visible = false;
-                return true;
-            }
-
-    return false;
-};
-
-function checkPoison(thisScorpion){
-    for(var n = 0; n < mushrooms.length; ++n)
-    {
-        if( mushrooms[n].x < thisScorpion.x + thisScorpion.width && thisScorpion.x < mushrooms[n].x + mushrooms[n].width)
-            if(mushrooms[n].y < thisScorpion.y + thisScorpion.height && thisScorpion.y < mushrooms[n].y + mushrooms[n].height)
-            {
-                poison.push(mushrooms[n]);
-                mushrooms.splice(n, 1);
-            }
-    }
-};
 
 function render(ctx){
     ctx.fillStyle = 'blue';
