@@ -1,8 +1,15 @@
+function collides(obj1, obj2){
+    if(obj2.x + obj2.width  > obj1.x && obj2.x < obj1.x + obj1.width)
+        if(obj2.y + obj2.height  > obj1.y && obj2.y < obj1.y + obj1.height)
+            return true;
+
+        return false;
+};
+
 function Mush(mushrooms, thisBullet){
     for(var n = 0; n < mushrooms.length; ++n)
     {
-        if(thisBullet.x > mushrooms[n].x && thisBullet.x < mushrooms[n].x + mushrooms[n].width)
-            if(thisBullet.y < mushrooms[n].y + mushrooms[n].height)
+        if(collides(mushrooms[n], thisBullet))
                 {
                     --mushrooms[n].size;
                     if(mushrooms[n].size == 0)
@@ -16,8 +23,7 @@ function Mush(mushrooms, thisBullet){
 function Poison(poison, thisBullet){
     for(var n = 0; n < poison.length; ++n)
     {
-        if(thisBullet.x > poison[n].x && thisBullet.x < poison[n].x + poison[n].width)
-            if(thisBullet.y < poison[n].y + poison[n].height)
+        if(collides(poison[n], thisBullet))
                 {
                     --poison[n].size;
                     if(poison[n].size == 0)
@@ -28,26 +34,10 @@ function Poison(poison, thisBullet){
     return false;
 };
 
-
-function Spider(spider, thisBullet){
-    if(thisBullet.x > spider.x && thisBullet.x < spider.x + spider.width)
-        if(thisBullet.y < spider.y + spider.height)
-                return true;
-    return false;
-};
-
-function Scorpion(scorpion, thisBullet){
-    if(thisBullet.x > scorpion.x && thisBullet.x < scorpion.x + scorpion.width)
-        if(thisBullet.y < scorpion.y + scorpion.height)
-                return true;
-    return false;
-};
-
-function checkPoison(mushrooms, poison, thisScorpion){
+function checkPoison(mushrooms, poison, scorpion){
     for(var n = 0; n < mushrooms.length; ++n)
     {
-        if( mushrooms[n].x < thisScorpion.x + thisScorpion.width && thisScorpion.x < mushrooms[n].x + mushrooms[n].width)
-            if(mushrooms[n].y < thisScorpion.y + thisScorpion.height && thisScorpion.y < mushrooms[n].y + mushrooms[n].height)
+        if(collides(mushrooms[n], scorpion))
             {
                 poison.push(mushrooms[n]);
                 mushrooms.splice(n, 1);
@@ -55,37 +45,13 @@ function checkPoison(mushrooms, poison, thisScorpion){
     }
 };
 
-
 function isDead(scorpion, spider, thisChar){
-    if(charVSSpider(spider, thisChar))
-        return true;
-    else if(charVSScorpion(scorpion, thisChar))
-        return true;
-    
-    else
-        return false;
-};
-
-function charVSSpider(spider, thisChar){
-    if(thisChar.x + thisChar.width  > spider.x && thisChar.x < spider.x + spider.width)
-        if(thisChar.y + thisChar.height  > spider.y && thisChar.y < spider.y + spider.height)
-
-            return true;
-
-    return false;
-};
-
-function charVSScorpion(scorpion, thisChar){
-    if(thisChar.x + thisChar.width > scorpion.x && thisChar.x < scorpion.x + scorpion.width)
-        if(thisChar.y + thisChar.height > scorpion.y && thisChar.y < scorpion.y + scorpion.height)
-            return true;
-
-    return false;
+     return collides(spider, thisChar) || collides(scorpion, thisChar);
 };
 
 exports.Mush = Mush;
 exports.Poison = Poison;
-exports.Spider = Spider;
-exports.Scorpion = Scorpion;
+exports.Spider = collides;
+exports.Scorpion = collides;
 exports.checkPoison = checkPoison;
 exports.isDead = isDead;

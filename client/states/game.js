@@ -15,7 +15,7 @@ var spider, scorpion;
 function start() {
   $('.gameScreen').html(jadify('game'));
   shared.bindBackButton();
-  //snd.playMusic();
+  snd.playMusic();
 };
 
 function init(){
@@ -76,8 +76,8 @@ function update(dTime){
             addBullet(characters[n]);
         if(collision.isDead(scorpion, spider, characters[n]))
             {
-                console.log("your dead dude");
-                //snd.stopMusic();
+                characters[n].x = 0;
+                characters[n].y = 650;
             }
     }
 
@@ -90,22 +90,32 @@ function update(dTime){
                     spider.visible = false;
                     bullets.splice(n, 1);
                     --n;
+                    continue;
                 }
             if(collision.Scorpion(scorpion, bullets[n]) && scorpion.visible)
                 {
                     scorpion.visible = false;
                     bullets.splice(n, 1);
                     --n;
+                    continue;
                 }
             if(collision.Mush(mushrooms, bullets[n]))
                 {
                     bullets.splice(n, 1);
                     --n;
+                    continue;
                 }
             if(collision.Poison(poison, bullets[n]))
                 {
                     bullets.splice(n, 1);
                     --n;
+                    continue;
+                }
+            if(bullets[n].y < 0)
+                {
+                    bullets.splice(n, 1);
+                    --n;
+                    continue;
                 }
         }
 
