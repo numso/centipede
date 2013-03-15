@@ -13,8 +13,6 @@ var poison = [];
 var spider, scorpion;
 
 function start() {
-  $('.gameScreen').html(jadify('game'));
-  shared.bindBackButton();
   //snd.playMusic();
 };
 
