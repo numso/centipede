@@ -77,15 +77,16 @@ function update(dTime){
     for(var n = 0; n < bullets.length; ++n)
         {
             bullets[n].y -= bullets[n].dy * dTime;
-            if(checkCollisionSpider(bullets[n]))
+            if(checkCollisionSpider(bullets[n]) && scorpion.visible)
                 {
                     bullets.splice(n, 1);
                     --n;
                 }
-            if(checkCollisionScorpion(bullets[n]))
+            if(checkCollisionScorpion(bullets[n]) && scorpion.visible)
                 {
                     bullets.splice(n, 1);
                     --n;
+                }
             if(checkMushroomCollision(bullets[n]))
                 {
                     bullets.splice(n, 1);
@@ -94,26 +95,30 @@ function update(dTime){
         }
 
     //scorpion position
-    if(scorpion.x > 0 && scorpion.x < (500 - scorpion.width))
+    if(scorpion.visible){
+        if(scorpion.x > 0 && scorpion.x < (500 - scorpion.width))
+            {
+                scorpion.x += scorpion.dx * dTime;
+                checkPoison(scorpion);
+            }
+        else
         {
+            scorpion.dx *= -1;
             scorpion.x += scorpion.dx * dTime;
-            checkPoison(scorpion);
+            scorpion.y = Math.floor(Math.random() * 700 - scorpion.height);
         }
-    else
-    {
-        scorpion.dx *= -1;
-        scorpion.x += scorpion.dx * dTime;
-        scorpion.y = Math.floor(Math.random() * 700 - scorpion.height);
     }
 
     //spider position
-    if(spider.x > 0 && spider.x < (500 - spider.width))
-        spider.x += spider.dx * dTime;
-    else
-        {
-            spider.dx *= -1;
+    if(scorpion.visible){
+        if(spider.x > 0 && spider.x < (500 - spider.width))
             spider.x += spider.dx * dTime;
-        }
+        else
+            {
+                spider.dx *= -1;
+                spider.x += spider.dx * dTime;
+            }
+    }
 };
 
 function addBullet(thisChar){
@@ -137,9 +142,7 @@ function checkMushroomCollision(thisBullet){
                         mushrooms.splice(n, 1);
                     return true;
                 }
-
     }
-
     return false;
 };
 
