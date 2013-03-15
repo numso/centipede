@@ -1,3 +1,8 @@
 .settingsWrapper
-  .temp This is the settings page
+  h1 Settings
+  .option(data-option='bgmusic')= 'Background Music '
+    span= (user.bgmusic) ? 'ON' : 'OFF'
+  .option(data-option='soundfx')= 'Sound Effects '
+    span= (user.soundfx) ? 'ON' : 'OFF'
+  //- input(type='button', value='left')
   .button.back Back

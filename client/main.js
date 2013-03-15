@@ -2,7 +2,8 @@ window.require = require;
 
 var jadify = require('./requires/render')
   , shared = require('./shared')
-  , g = require('./graphics')
+  , g      = require('./graphics')
+  , sounds = require('./sounds')
   ;
 
 // Load all the states
@@ -10,8 +11,8 @@ var states = {
   menu:     require('./states/menu'),
   game:     require('./states/game'),
   scores:   require('./states/scores'),
-  credits:  require('./states/credits'),
-  settings: require('./states/settings')
+  settings: require('./states/settings'),
+  credits:  require('./states/credits')
 };
 
 var lastTime, ctx;
@@ -19,14 +20,9 @@ var lastTime, ctx;
 function init() {
   window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (cb) { window.setTimeout(cb, 1000 / 60); };
 
-  // initialize the graphics object
+  // initialize the graphics and sound object
   g.init();
-
-  // get the high scores from the server
-  getScores();
-
-  // bind all the buttons
-  bindHandlers();
+  sounds.init();
 
   // initialize all the states
   initStates();
@@ -38,20 +34,13 @@ function init() {
   var canvas = document.getElementById('myGame');
   ctx = canvas.getContext('2d');
 
+  sounds.playMusic();
+
   // set up the time
   lastTime = Date.now();
 
   // start the game loop
   requestAnimationFrame(gameLoop);
-}
-
-function getScores() {
-  $.get('/getHighScores', function (data) {
-    shared.scores = JSON.parse(data);
-
-    var scores = jadify('components/scores-table', { hsScores: shared.scores });
-    $('.scoresWrapper .all-scores').html(scores);
-  });
 }
 
 function initStates() {
@@ -64,33 +53,6 @@ function initStates() {
 
     states[state].init();
   }
-}
-
-function bindHandlers() {
-  $('#game').click(function () {
-    shared.setState(states.game);
-  });
-
-  $('#scores').click(function () {
-    shared.setState(states.scores);
-  });
-
-  $('#credits').click(function () {
-    shared.setState(states.credits);
-  });
-
-  $('#settings').click(function () {
-    shared.setState(states.settings);
-  });
-
-  $('#exit').click(function () {
-    window.open('', '_self', '');
-    window.close();
-  });
-
-  $('.back').click(function () {
-    shared.setState(states.menu);
-  });
 }
 
 function gameLoop() {

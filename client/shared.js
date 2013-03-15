@@ -17,4 +17,4 @@ exports.getState       = getState;
 exports.setState       = setState;
 exports.nop            = nop;
 exports.scores         = [];
-exports.impress        = undefined;
+exports.user           = {};

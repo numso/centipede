@@ -1,7 +1,7 @@
 var express = require('express')
-  , http = require('http')
-  , path = require('path')
-  , fs = require('fs')
+  , http    = require('http')
+  , path    = require('path')
+  , fs      = require('fs')
   ;
 
 var app = express();
@@ -21,6 +21,7 @@ app.configure(function () {
   app.use(express.methodOverride());
   app.use(express.cookieParser());
   app.use(express.session(sessOptions));
+  app.use(ensureUser);
   app.use(app.router);
   app.use(require('stylus').middleware(__dirname + '/public'));
   app.use(express.static(path.join(__dirname, 'public')));
@@ -33,11 +34,11 @@ app.configure('development', function () {
 function initMiddlewares(path) {
   app.middleware = {};
   initFiles(path, 'middlewares');
-};
+}
 
 function initControllers(path) {
   initFiles(path, 'controllers');
-};
+}
 
 function initFiles(path, type) {
   path = path || __dirname + '/' + type;
@@ -54,7 +55,7 @@ function initFiles(path, type) {
       initFiles(fullPath, type);
     }
   });
-};
+}
 
 function initFile(app, file, type) {
   var match = /^(.*?\/([A-Za-z_]*))\.js$/.exec(file);
@@ -64,7 +65,7 @@ function initFile(app, file, type) {
     console.info('    Loading ' + type + ' ' + match[2] + ' (' + file + ')');
     asset.init(app);
   }
-};
+}
 
 initMiddlewares();
 initControllers();
@@ -72,3 +73,22 @@ initControllers();
 http.createServer(app).listen(app.get('port'), function () {
   console.log("Express server listening on port " + app.get('port'));
 });
+
+function ensureUser(req, res, next) {
+  if (req.session && req.session.user) return next();
+
+  req.session.user = {
+    bgmusic: true,
+    soundfx: true,
+    username: '',
+    controls: {
+      left:  37,
+      up:    38,
+      right: 39,
+      down:  40,
+      fire:  32
+    }
+  };
+
+  next();
+}

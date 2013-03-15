@@ -13,10 +13,12 @@ var poison = [];
 var spider, scorpion;
 
 function start() {
-  $('.gameScreen').html(jadify('game'));
-  shared.bindBackButton();
+  snd.playMusic('game');
+}
+
+function stop() {
   snd.playMusic();
-};
+}
 
 function init(){
     characters.push({
@@ -72,8 +74,10 @@ function update(dTime){
             characters[n].y -= characters[n].dy * dTime;
         if(inp.down() && (characters[n].y + characters[n].dy) < (700 - characters[n].height))
             characters[n].y += characters[n].dy * dTime;
-        if(inp.fire())
+        if(inp.fire()) {
+            snd.playEffect('shoot');
             addBullet(characters[n]);
+        }
         if(collision.isDead(scorpion, spider, characters[n]))
             {
                 characters[n].x = 0;
@@ -175,9 +179,10 @@ function render(ctx){
         g.drawSpider(ctx, spider.x, spider.y);
 };
 
-exports.start = start;
+exports.start  = start;
+exports.stop   = stop;
 exports.update = update;
 exports.render = render;
-exports.init = init;
-exports.str = 'slide-game';
+exports.init   = init;
+exports.str    = 'slide-game';
 

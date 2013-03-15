@@ -1,10 +1,23 @@
 .scoresWrapper
-  text-align: center
   width: 1000px
 
   h1
     color: white
+    text-align: center
+    font-size: 200%
 
   .all-scores
     .single-score
-      color: white
+      div
+        display: inline-block
+        color: white
+
+      .place
+        float: left
+        position: absolute
+
+      .name
+        margin-left: 80px
+
+      .score
+        float: right
