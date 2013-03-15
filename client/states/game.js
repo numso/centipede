@@ -7,19 +7,21 @@ var jadify = require('../requires/render')
   ;
 
 var characters = [];
-var bullets = [];
 var mushrooms = [];
 var poison = [];
-var spider, scorpion;
+var spider, scorpion, centipede;
+var bodyLength = 12;
+//temporary used for bounds checking on the centipede
+var gameWidth = 1000;
+var edgeFlag = false;
 
 function start() {
-  $('.gameScreen').html(jadify('game'));
-  shared.bindBackButton();
   snd.playMusic();
 };
 
 function init(){
     characters.push({
+        bullets: [],
         width: 30,
         height: 50,
         x: 0,
@@ -29,11 +31,13 @@ function init(){
    });
 
     spider = {
+        time: 0,
+        deathTimer: 0,
         visible: true,
         width: 40,
         height: 40,
         x: 1,
-        y: 550,
+        y: 450,
         dx: .2,
         dy: .2
     };
@@ -47,7 +51,42 @@ function init(){
         dx: .1
     };
 
+    centipede = {
+        width: 20,
+        height: 20,
+        body: createBody(20, 20),
+        dy: .1
+    };
+
        placeMushrooms();
+};
+
+function createBody(width, height){
+    var newBody = [];
+    var position = 500;
+
+    newBody.push({
+        type: 'head',
+        dropFlag: false,
+        dropCount: 0,
+        x: (500 - width),
+        y: (0 + height),
+        dx: .1
+    });
+
+    for(var n = 0; n < bodyLength - 1; ++n){
+        newBody.push({
+            type: 'body',
+            dropFlag: false,
+            dropCount: 0,
+            x: position,
+            y: (0 + height),
+            dx: .1
+        });
+        position += width;
+    }
+    console.log(newBody);
+    return newBody;
 };
 
 function placeMushrooms(){
@@ -64,60 +103,77 @@ function placeMushrooms(){
 function update(dTime){
     //character position
     for(var n = 0; n < characters.length; ++n){
-        if(inp.left() && (characters[n].x - characters[n].dx) > -10)
-            characters[n].x -= characters[n].dx * dTime;
-        if(inp.right() && (characters[n].x + characters[n].dx) < (500 - characters[n].width))
-            characters[n].x += characters[n].dx * dTime;
-        if(inp.up() && (characters[n].y - characters[n].dy) > 0)
-            characters[n].y -= characters[n].dy * dTime;
-        if(inp.down() && (characters[n].y + characters[n].dy) < (700 - characters[n].height))
-            characters[n].y += characters[n].dy * dTime;
+            if(inp.left() && (characters[n].x - characters[n].dx) > -10){
+                characters[n].x -= characters[n].dx * dTime;
+                if(collision.cantMove(mushrooms, characters[n]))
+                    characters[n].x += characters[n].dx * dTime;
+            }
+                
+            if(inp.right() && (characters[n].x + characters[n].dx) < (500 - characters[n].width)){
+                characters[n].x += characters[n].dx * dTime;
+                if(collision.cantMove(mushrooms, characters[n]))
+                    characters[n].x -= characters[n].dx * dTime;
+            }
+                
+                
+            if(inp.up() && (characters[n].y - characters[n].dy) > 550){
+                characters[n].y -= characters[n].dy * dTime;
+                if(collision.cantMove(mushrooms, characters[n]))
+                    characters[n].y += characters[n].dy * dTime;
+            }
+                
+                
+            if(inp.down() && (characters[n].y + characters[n].dy) < (700 - characters[n].height)){
+                characters[n].y += characters[n].dy * dTime;
+                if(collision.cantMove(mushrooms, characters[n]))
+                    characters[n].y -= characters[n].dy * dTime;
+            }
+
         if(inp.fire())
             addBullet(characters[n]);
-        if(collision.isDead(scorpion, spider, characters[n]))
+        if(collision.isDead(spider, characters[n]))
             {
                 characters[n].x = 0;
                 characters[n].y = 650;
             }
+        //bullet position
+        for(var m = 0; m < characters[n].bullets.length; ++m)
+            {
+                characters[n].bullets[m].y -= characters[n].bullets[m].dy * dTime;
+                if(collision.Spider(spider, characters[n].bullets[m]) && spider.visible)
+                    {
+                        spider.visible = false;
+                        characters[n].bullets.splice(m, 1);
+                        --m;
+                        continue;
+                    }
+                if(collision.Scorpion(scorpion, characters[n].bullets[m]) && scorpion.visible)
+                    {
+                        scorpion.visible = false;
+                        characters[n].bullets.splice(m, 1);
+                        --m;
+                        continue;
+                    }
+                if(collision.Mush(mushrooms, characters[n].bullets[m]))
+                    {
+                        characters[n].bullets.splice(m, 1);
+                        --m;
+                        continue;
+                    }
+                if(collision.Poison(poison, characters[n].bullets[m]))
+                    {
+                        characters[n].bullets.splice(m, 1);
+                        --m;
+                        continue;
+                    }
+                if(characters[n].bullets[m].y < 0)
+                    {
+                        characters[n].bullets.splice(m, 1);
+                        --m;
+                        continue;
+                    }
+            }
     }
-
-    //bullet position
-    for(var n = 0; n < bullets.length; ++n)
-        {
-            bullets[n].y -= bullets[n].dy * dTime;
-            if(collision.Spider(spider, bullets[n]) && spider.visible)
-                {
-                    spider.visible = false;
-                    bullets.splice(n, 1);
-                    --n;
-                    continue;
-                }
-            if(collision.Scorpion(scorpion, bullets[n]) && scorpion.visible)
-                {
-                    scorpion.visible = false;
-                    bullets.splice(n, 1);
-                    --n;
-                    continue;
-                }
-            if(collision.Mush(mushrooms, bullets[n]))
-                {
-                    bullets.splice(n, 1);
-                    --n;
-                    continue;
-                }
-            if(collision.Poison(poison, bullets[n]))
-                {
-                    bullets.splice(n, 1);
-                    --n;
-                    continue;
-                }
-            if(bullets[n].y < 0)
-                {
-                    bullets.splice(n, 1);
-                    --n;
-                    continue;
-                }
-        }
 
     //scorpion position
     if(scorpion.visible){
@@ -130,24 +186,71 @@ function update(dTime){
         {
             scorpion.dx *= -1;
             scorpion.x += scorpion.dx * dTime;
-            scorpion.y = Math.floor(Math.random() * 700 - scorpion.height);
+            scorpion.y = Math.floor(Math.random() * 550 - scorpion.height);
         }
     }
 
     //spider position
-    if(spider.visible){
-        if(spider.x > 0 && spider.x < (500 - spider.width))
+    if(spider.x > 0 && spider.x < (500 - spider.width))
+        spider.x += spider.dx * dTime;
+    else
+        {
+            spider.dx *= -1;
             spider.x += spider.dx * dTime;
-        else
-            {
-                spider.dx *= -1;
-                spider.x += spider.dx * dTime;
-            }
+        }
+
+    if(spider.y + spider.height < 700 && spider.y > 449)
+        spider.y -= spider.dy * dTime;
+    else{
+        spider.dy *= -1;
+        spider.y -= spider.dy * dTime;
     }
+
+    spider.time += dTime;
+    if(spider.time >= 2000){
+        spider.time = 0;
+        spider.dx = (Math.random() * .4) -.2;
+        spider.dy = (Math.random() * .4) -.2;
+    }
+
+    if(!spider.visible){
+        spider.deathTimer += dTime;
+        if(spider.deathTimer >= 10000){
+            spider.visible = true;
+            spider.deathTimer = 0;
+            spider.y = Math.floor(Math.random() * 50) + 500;
+        }  
+    }
+
+    //centipede position
+    for (var n = 0; n < centipede.body.length; ++n){
+        if (centipede.body[n].x > 0 && centipede.body[n].x < gameWidth){
+            centipede.body[n].x -= centipede.body[n].dx * dTime;
+        }
+        else {
+            
+            if (edgeFlag == false){
+                gameWidth = 500 - centipede.width;
+                edgeFlag = true;
+            }
+            if (centipede.body[n].dropCount > centipede.height){
+                centipede.body[n].dx *= -1;
+                centipede.body[n].x -= centipede.body[n].dx * dTime;
+                centipede.body[n].dropCount = 0;
+            }
+
+            else {
+                centipede.body[n].dropCount += centipede.dy * dTime;
+                centipede.body[n].y += centipede.dy * dTime;
+            }
+        }
+    }
+
+
 };
 
 function addBullet(thisChar){
-    bullets.push({
+    thisChar.bullets.push({
         width: 4,
         height: 10,
         x: thisChar.x + 20,
@@ -158,16 +261,19 @@ function addBullet(thisChar){
 
 
 function render(ctx){
-    ctx.fillStyle = 'blue';
+    ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, 500, 700);
-    for(var n = 0; n < characters.length; ++n)
+    for(var n = 0; n < characters.length; ++n){
         g.drawPlayer(ctx, characters[n].x, characters[n].y);
-    for(var n = 0; n < bullets.length; ++n)
-        g.drawBullet(ctx, bullets[n].x, bullets[n].y);
+        for(var m = 0; m < characters[n].bullets.length; ++m)
+            g.drawBullet(ctx, characters[n].bullets[m].x, characters[n].bullets[m].y);
+    }
     for(var n = 0; n < mushrooms.length; ++n)
         g.drawMushrooms(mushrooms[n].size, ctx, mushrooms[n].x, mushrooms[n].y);
     for(var n = 0; n < poison.length; ++n)
         g.drawPoison(poison[n].size, ctx, poison[n].x, poison[n].y);
+    for(var n = 0; n < centipede.body.length; ++n)
+        g.drawCentipede(centipede.body[n].type, ctx, centipede.body[n].x, centipede.body[n].y);
 
     if(scorpion.visible)
         g.drawScorpion(ctx, scorpion.x, scorpion.y);
