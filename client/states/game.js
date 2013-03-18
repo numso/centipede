@@ -48,6 +48,7 @@ function init(){
 
     scorpion = {
         visible: true,
+        direction: 'right',
         width: 20,
         height: 20,
         x: 1,
@@ -71,20 +72,26 @@ function createBody(width, height){
 
     newBody.push({
         type: 'head',
+        direction: 'left',
         dropFlag: false,
         dropCount: 0,
         x: (500 - width),
         y: (0 + height),
+        width: 20,
+        height: 20,
         dx: .1
     });
 
     for(var n = 0; n < bodyLength - 1; ++n){
         newBody.push({
             type: 'body',
+            direction: 'left',
             dropFlag: false,
             dropCount: 0,
             x: position,
             y: (0 + height),
+            width: 20,
+            height: 20,
             dx: .1
         });
         position += width;
@@ -188,6 +195,7 @@ function update(dTime){
             }
         else
         {
+            setDirection(scorpion);
             scorpion.dx *= -1;
             scorpion.x += scorpion.dx * dTime;
             scorpion.y = Math.floor(Math.random() * 550 - scorpion.height);
@@ -228,8 +236,11 @@ function update(dTime){
 
     //centipede position
     for (var n = 0; n < centipede.body.length; ++n){
-        if (centipede.body[n].x > 0 && centipede.body[n].x < gameWidth){
-            centipede.body[n].x -= centipede.body[n].dx * dTime;
+        if (centipede.body[n].x > 0 && centipede.body[n].x < gameWidth && centipede.body[n].dropFlag == false){
+            if(collision.centipedeMushroom(centipede.body[n], mushrooms))
+                centipede.body[n].dropFlag = true;
+            else
+                centipede.body[n].x -= centipede.body[n].dx * dTime;
         }
         else {
             
@@ -241,9 +252,11 @@ function update(dTime){
                 centipede.body[n].dx *= -1;
                 centipede.body[n].x -= centipede.body[n].dx * dTime;
                 centipede.body[n].dropCount = 0;
+                centipede.body[n].dropFlag = false;
             }
 
             else {
+                setDirection(centipede.body[n]);
                 centipede.body[n].dropCount += centipede.dy * dTime;
                 centipede.body[n].y += centipede.dy * dTime;
             }
@@ -251,6 +264,14 @@ function update(dTime){
     }
 
 
+};
+
+function setDirection(thisBodyPart){
+    if(thisBodyPart.direction == 'left')
+        thisBodyPart.direction = 'right';
+    else if(thisBodyPart.direction == 'right')
+        thisBodyPart.direction = 'left';
+    return;
 };
 
 function addBullet(thisChar){
@@ -277,10 +298,10 @@ function render(ctx){
     for(var n = 0; n < poison.length; ++n)
         g.drawPoison(poison[n].size, ctx, poison[n].x, poison[n].y);
     for(var n = 0; n < centipede.body.length; ++n)
-        g.drawCentipede(centipede.body[n].type, ctx, centipede.body[n].x, centipede.body[n].y);
+        g.drawCentipede(centipede.body[n].type, centipede.body[n].direction, ctx, centipede.body[n].x, centipede.body[n].y);
 
     if(scorpion.visible)
-        g.drawScorpion(ctx, scorpion.x, scorpion.y);
+        g.drawScorpion(scorpion.direction, ctx, scorpion.x, scorpion.y);
     if(spider.visible)
         g.drawSpider(ctx, spider.x, spider.y);
 };

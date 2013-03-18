@@ -23,8 +23,11 @@ function drawSpider(ctx, x, y){
     ctx.drawImage(spriteSheet, 50, 0, 50, 50, x, y, 40, 40);
 };
 
-function drawScorpion(ctx, x, y){
-    ctx.drawImage(spriteSheet, 150, 0, 50, 50, x, y, 20, 20);
+function drawScorpion(direction, ctx, x, y){
+    if(direction == 'right')
+        ctx.drawImage(spriteSheet, 150, 0, 50, 50, x, y, 20, 20);
+    if(direction == 'left')
+        ctx.drawImage(spriteSheet, 300, 0, 50, 50, x, y, 20, 20);
 };
 
 function drawPoison(num, ctx, x, y){
@@ -38,11 +41,19 @@ function drawPoison(num, ctx, x, y){
         ctx.drawImage(spriteSheet, 150, 50, 50, 50, x, y, 20, 20);
 };
 
-function drawCentipede(type, ctx, x, y){
-    if(type == 'head')
-        ctx.drawImage(spriteSheet, 150, 100, 50, 50, x, y, 20, 20);
-    if(type == 'body')
-        ctx.drawImage(spriteSheet, 150, 150, 50, 50, x, y, 20, 20);
+function drawCentipede(type, direction, ctx, x, y){
+    if(direction == 'left'){    
+        if(type == 'head')
+            ctx.drawImage(spriteSheet, 150, 100, 50, 50, x, y, 20, 20);
+        if(type == 'body')
+            ctx.drawImage(spriteSheet, 150, 150, 50, 50, x, y, 20, 20);
+    }
+    if(direction == 'right'){
+        if(type == 'head')
+            ctx.drawImage(spriteSheet, 0, 100, 50, 50, x, y, 20, 20);
+        if(type == 'body')
+            ctx.drawImage(spriteSheet, 0, 150, 50, 50, x, y, 20, 20);
+    }
 };
 
 function init(){
