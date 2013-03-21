@@ -6,6 +6,17 @@ function collides(obj1, obj2){
         return false;
 };
 
+function centipedeMushroom(centipede, mushrooms){
+    for(var n = 0; n < mushrooms.length; ++n){
+        if(collides(mushrooms[n], centipede))
+            {
+                console.log("collision");
+                return true;
+            }
+    }
+    return false;
+};
+
 function Mush(mushrooms, thisBullet){
     for(var n = 0; n < mushrooms.length; ++n)
     {
@@ -64,3 +75,4 @@ exports.Scorpion = collides;
 exports.checkPoison = checkPoison;
 exports.isDead = isDead;
 exports.cantMove = cantMove;
+exports.centipedeMushroom = centipedeMushroom;
