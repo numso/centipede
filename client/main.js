@@ -63,8 +63,8 @@ function gameLoop() {
   // get the time difference, but cap it at 20ms
   var curTime = Date.now()
     , dTime   = curTime - lastTime;
+  lastTime = curTime;
   if (dTime > 20) dTime = 20;
-
   shared.getState().update(dTime);
   shared.getState().render(ctx);
 }

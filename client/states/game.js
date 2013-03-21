@@ -170,6 +170,12 @@ function update(dTime){
                         --m;
                         continue;
                     }
+
+                // for (var i = 0; i < )
+                // if (collision.Centipede()) {
+
+                // }
+
                 if(characters[n].bullets[m].y < 0)
                     {
                         characters[n].bullets.splice(m, 1);
@@ -229,7 +235,7 @@ function update(dTime){
     //centipede position
     for (var n = 0; n < centipede.body.length; ++n){
         if (centipede.body[n].x > 0 && centipede.body[n].x < gameWidth){
-            centipede.body[n].x -= centipede.body[n].dx * dTime;
+            centipede.body[n].x -= centipede.body[n].dx * 20;
         }
         else {
             
@@ -239,13 +245,13 @@ function update(dTime){
             }
             if (centipede.body[n].dropCount > centipede.height){
                 centipede.body[n].dx *= -1;
-                centipede.body[n].x -= centipede.body[n].dx * dTime;
+                centipede.body[n].x -= centipede.body[n].dx * 20;
                 centipede.body[n].dropCount = 0;
             }
 
             else {
-                centipede.body[n].dropCount += centipede.dy * dTime;
-                centipede.body[n].y += centipede.dy * dTime;
+                centipede.body[n].dropCount += centipede.dy * 20;
+                centipede.body[n].y += centipede.dy * 20;
             }
         }
     }
