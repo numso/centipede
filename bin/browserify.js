@@ -14,7 +14,7 @@ function log() {
 var bundle = browserify({
   watch: false,
   cache: false,
-  debug: false
+  debug: true
 });
 
 bundle.on('syntaxError', function (err) {
@@ -24,6 +24,13 @@ bundle.on('syntaxError', function (err) {
 
 log('loading jade views');
 bundle.use(browserijade(__dirname + "/../" + config.browserify.jade));
+
+bundle.on('syntaxError', function (err) {
+  //console.log(err.message);
+  console.log(err.annotated);
+  console.error(err.stack);
+  process.exit(1);
+});
 
 log('running requires');
 function addFiles(folder) {
