@@ -22,7 +22,7 @@ function bindHandlers() {
     sounds.playEffect();
     sounds.playMusic();
 
-    $(this).find('.bocks').css('background-position-y', shared.user[key] ? '' : '50px');
+    $(this).find('.bocks').css('background-position-y', val ? '' : '50px');
     $.post('/updateUser', { key: key, val: val });
   });
 
@@ -62,8 +62,9 @@ function showDialog(key, $this) {
 
     if (e.keyCode === 27) return;
 
-    $this.find('.bocks').text(makeReadable(e.keyCode));
-    $.post('/updateUser', { key: 'controls', key2: key, val: e.keyCode });
+    var val = shared.user.controls[key] = e.keyCode;
+    $this.find('.bocks').text(makeReadable(val));
+    $.post('/updateUser', { key: 'controls', key2: key, val: val });
   });
 }
 
