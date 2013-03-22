@@ -6,6 +6,7 @@ var shared = require('../shared')
 function init() {
   getUser();
   bindHandlers();
+  createQR('QRRFZ');
 }
 
 function getUser() {
@@ -31,11 +32,23 @@ function bindHandlers() {
   });
 }
 
+function createQR(id) {
+  var url = window.location.toString();
+  url = url.substr(0, url.indexOf('#'));
+  url += 'c/' + id;
+
+  var qr = new QRCodeLib.QRCodeDraw();
+  qr.draw(document.getElementById('qr'), url, function (err, canvas) {
+    if (err) return console.log('ERROR: ' + err);
+  });
+
+  $('.qrurl').text(url.substr(0, url.indexOf(id)));
+  $('.qrtext').text(id);
+}
+
 exports.str  = 'slide-settings';
 exports.init = init;
 exports.unbindDialog = removeDialog;
-
-
 
 function showDialog(key, $this) {
   removeDialog();

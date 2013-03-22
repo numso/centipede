@@ -34,5 +34,11 @@ mixin controlsetting(id, val)
     h1 Controls
     for val, key in user.controls
       +controlsetting(key, val)
+  .instructions
+    span To join the game, go to the url 
+    .qrurl
+    span  and type in the code 
+    .qrtext
+    span  or just scan this QR Code.
+  canvas#qr
   .button.back Back
-  
