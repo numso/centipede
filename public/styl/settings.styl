@@ -1,13 +1,63 @@
 .settingsWrapper
   width: 1000px
   color: white
-  text-align: center
 
   h1
+    text-align: center
     font-size: 200%
 
-  .option
+  .musics
+    float: left
+
+    .music-setting
+      cursor: pointer
+
+      &:hover
+        color: $text-color
+
+      .bocks
+        background: url("/img/checkbox.png")
+        height: 50px
+        width: 50px
+        display: inline-block
+
+      span
+        position: relative
+        top: -15px
+        left: 10px
+
+  .controlls
+    margin-left: 600px
+
+    .control-setting
+      cursor: pointer
+
+      &:hover
+        color: $text-color
+
+
+.dialog-box
+  text-align: center
+  font-size: 36px
+  position: relative
+  width: 70%
+  max-width: 800px
+  min-width: 400px
+  margin: 0 auto
+  margin-top: 200px
+  padding: 40px
+  border-radius: 15px
+  background-color: rgba(255, 255, 255, 0.8)
+  box-shadow: 0 0 20px 2px rgba(255, 0, 0, .5)
+
+  .text-line
+    padding-bottom: 15px
+
+  .close-btn
+    position: absolute
     cursor: pointer
+    left: 5px
+    top: 0
 
     &:hover
-      color: #0000cc
+      color: $text-color

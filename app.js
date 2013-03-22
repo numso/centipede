@@ -82,10 +82,10 @@ function ensureUser(req, res, next) {
     soundfx: true,
     username: '',
     controls: {
-      left:  37,
       up:    38,
-      right: 39,
+      left:  37,
       down:  40,
+      right: 39,
       fire:  32
     }
   };

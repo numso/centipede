@@ -40,6 +40,7 @@ function bindHandlers() {
 
   $('.back').click(function () {
     sounds.playEffect();
+    settings.unbindDialog();
     shared.setState(menu);
   });
 }
