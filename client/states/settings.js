@@ -34,7 +34,8 @@ function bindHandlers() {
 
 function createQR(id) {
   var url = window.location.toString();
-  url = url.substr(0, url.indexOf('#'));
+  if (url.indexOf('#') !== -1)
+    url = url.substr(0, url.indexOf('#'));
   url += 'c/' + id;
 
   var qr = new QRCodeLib.QRCodeDraw();
