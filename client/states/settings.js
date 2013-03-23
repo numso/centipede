@@ -29,6 +29,7 @@ function bindHandlers() {
   $('.control-setting').click(function () {
     var key = $(this).data('option');
     showDialog(key, $(this));
+    sounds.playEffect();
   });
 }
 
@@ -54,11 +55,15 @@ exports.unbindDialog = removeDialog;
 function showDialog(key, $this) {
   removeDialog();
   $('body').append(jadify('components/dialog', { key: key }));
-  $('.close-btn').click(removeDialog);
+  $('.close-btn').click(function () {
+    sounds.playEffect();
+    removeDialog();
+  });
 
   // bind keypress to get key
   $('body').bind('keydown.settings', function (e) {
     // console.log('you pressed ' + e.keyCode);
+    sounds.playEffect();
     removeDialog();
 
     if (e.keyCode === 27) return;
