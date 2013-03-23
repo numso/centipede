@@ -1,8 +1,44 @@
+mixin musicsetting(id, title)
+  - var stile = user[id] ? '' : 'background-position-y: 50px;'
+  .music-setting(data-option=id)
+    .bocks(style=stile)
+    span= title
+
+mixin controlsetting(id, val)
+  - if (val == 32)
+    - val = 'space';
+  - else if (val == 13)
+    - val = 'enter';
+  - else if (val == 37)
+    - val = 'left';
+  - else if (val == 38)
+    - val = 'up';
+  - else if (val == 39)
+    - val = 'right';
+  - else if (val == 40)
+    - val = 'down';
+  - else
+    - val = String.fromCharCode(val);
+
+  .control-setting(data-option=id)
+    span= id + ": "
+    span.bocks= val
+
 .settingsWrapper
   h1 Settings
-  .option(data-option='bgmusic')= 'Background Music '
-    span= (user.bgmusic) ? 'ON' : 'OFF'
-  .option(data-option='soundfx')= 'Sound Effects '
-    span= (user.soundfx) ? 'ON' : 'OFF'
-  //- input(type='button', value='left')
+  .musics
+    h1 Music
+    +musicsetting('bgmusic', 'Background Music')
+    +musicsetting('soundfx', 'Sound Effects')
+  .controlls
+    h1 Controls
+    for val, key in user.controls
+      +controlsetting(key, val)
+  .instructions
+    span To join the game, go to the url 
+    .qrurl
+    span  and type in the code 
+    .qrtext
+    span  or just scan this QR Code.
+  canvas#qr
   .button.back Back

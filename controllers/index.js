@@ -28,6 +28,14 @@ function attachUser(req, res, next) {
 }
 
 function updateUser(req, res, next) {
-  req.session.user[req.body.key] = (req.body.val === 'true');
+  if (req.body.val === 'true') req.body.val = true;
+  if (req.body.val === 'false') req.body.val = false;
+
+  if (req.body.key === 'controls') {
+    req.session.user.controls[req.body.key2] = req.body.val;
+    return res.send('ok');
+  }
+
+  req.session.user[req.body.key] = req.body.val;
   res.send('ok');
 }
