@@ -8,7 +8,8 @@ function drawBullet(ctx, x, y){
     ctx.drawImage(spriteSheet, 341, 185, 4, 10, x, y, 4, 10);
 };
 
-function drawMushrooms(num, ctx, x, y){
+function drawMushrooms(num, type, ctx, x, y){
+if(type == 'shroom'){    
     if(num == 4)
         ctx.drawImage(spriteSheet, 200, 50, 50, 50, x, y, 20, 20);
     if(num == 3)
@@ -17,6 +18,18 @@ function drawMushrooms(num, ctx, x, y){
         ctx.drawImage(spriteSheet, 300, 50, 50, 50, x, y, 20, 20);
     if(num == 1)
         ctx.drawImage(spriteSheet, 350, 50, 50, 50, x, y, 20, 20);
+}
+if(type == 'poison'){
+    if(num == 4)
+        ctx.drawImage(spriteSheet, 0, 50, 50, 50, x, y, 20, 20);
+    if(num == 3)
+        ctx.drawImage(spriteSheet, 100, 50, 50, 50, x, y, 20, 20);
+    if(num == 2)
+        ctx.drawImage(spriteSheet, 50, 50, 50, 50, x, y, 20, 20);
+    if(num == 1)
+        ctx.drawImage(spriteSheet, 150, 50, 50, 50, x, y, 20, 20); 
+}
+
 };
 
 function drawSpider(ctx, x, y){
@@ -28,17 +41,6 @@ function drawScorpion(direction, ctx, x, y){
         ctx.drawImage(spriteSheet, 150, 0, 50, 50, x, y, 20, 20);
     if(direction == 'left')
         ctx.drawImage(spriteSheet, 300, 0, 50, 50, x, y, 20, 20);
-};
-
-function drawPoison(num, ctx, x, y){
-    if(num == 4)
-        ctx.drawImage(spriteSheet, 0, 50, 50, 50, x, y, 20, 20);
-    if(num == 3)
-        ctx.drawImage(spriteSheet, 100, 50, 50, 50, x, y, 20, 20);
-    if(num == 2)
-        ctx.drawImage(spriteSheet, 50, 50, 50, 50, x, y, 20, 20);
-    if(num == 1)
-        ctx.drawImage(spriteSheet, 150, 50, 50, 50, x, y, 20, 20);
 };
 
 function drawCentipede(type, direction, ctx, x, y){
@@ -65,7 +67,6 @@ exports.drawPlayer =    drawPlayer;
 exports.drawBullet =    drawBullet;
 exports.drawMushrooms = drawMushrooms;
 exports.drawSpider =    drawSpider;
-exports.drawPoison =    drawPoison;
 exports.drawScorpion =  drawScorpion;
 exports.drawCentipede = drawCentipede;
 exports.init =          init;
