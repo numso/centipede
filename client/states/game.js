@@ -22,6 +22,7 @@ function start() {
   scorpion.init();
   centipede.init();
   shrooms.init();
+  flea.init();
 }
 
 function stop() {
@@ -36,6 +37,7 @@ function update(dTime){
     spider.update(dTime);
     scorpion.update(dTime);
     centipede.update(dTime);
+    flea.update(dTime);
 };
 
 
@@ -48,6 +50,7 @@ function render(ctx){
     spider.render(ctx, g);
     scorpion.render(ctx, g);
     centipede.render(ctx, g);
+    flea.render(ctx, g);
 };
 
 exports.start  = start;

@@ -49,10 +49,11 @@ function update(dTime){
     snd.playEffect('shoot');
     bullets.add(player.x, player.y);
   }
-  // if (collision.isDead(spider, player)) {
-  //   players[n].x = 0;
-  //   players[n].y = 650;
-  // }
+
+  if (collision.isDead(player)) {
+    player.x = 0;
+    player.y = 650;
+  }
 }
 
 function render(ctx, g){

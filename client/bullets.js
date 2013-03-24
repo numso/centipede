@@ -1,11 +1,13 @@
 var bullets = [];
-var spider = require('./spider')
-,   scorpion = require('./scorpion')
-,   peed = require('./centipede')
-,   collision = require('./collision')
+
+var spider    = require('./spider')
+  , scorpion  = require('./scorpion')
+  , peed      = require('./centipede')
+  , collision = require('./collision')
   , shrooms   = require('./shrooms')
   , playa     = require('./playa')
-;
+  , flea      = require('./flea')
+  ;
 
 function add(x, y){
     bullets.push({
@@ -15,7 +17,7 @@ function add(x, y){
         y: y,
         dy: .3
     });
-};
+}
 
 function update(dTime){
     for(var n = 0; n < bullets.length; ++n)
@@ -32,11 +34,16 @@ function update(dTime){
         if(collision.Scorpion(scorpion.pos(), bullets[n]) && scorpion.visible())
             {
                 bullets.splice(n--, 1);
-                --n;
                 scorpion.hide();
                 playa.addScore(30);
                 continue;
             }
+        if(collision.Flea(flea.pos(), bullets[n]) && flea.visible()){
+            console.log("flea collision");
+            bullets.splice(n--, 1);
+            flea.hide();
+            continue;
+        }
 
         var centipeed = peed.getPeed();
         var ind = collision.Peed(bullets[n], centipeed);
