@@ -1,11 +1,13 @@
 var bullets = [];
-var spider = require('./spider')
-,   scorpion = require('./scorpion')
-,   peed = require('./centipede')
-,   collision = require('./collision')
-,   shrooms   = require('./shrooms')
-,   flea = require('./flea')
-;
+
+var spider    = require('./spider')
+  , scorpion  = require('./scorpion')
+  , peed      = require('./centipede')
+  , collision = require('./collision')
+  , shrooms   = require('./shrooms')
+  , playa     = require('./playa')
+  , flea      = require('./flea')
+  ;
 
 function add(x, y){
     bullets.push({
@@ -15,7 +17,7 @@ function add(x, y){
         y: y,
         dy: .3
     });
-};
+}
 
 function update(dTime){
     for(var n = 0; n < bullets.length; ++n)
@@ -26,12 +28,14 @@ function update(dTime){
                 bullets.splice(n, 1);
                 --n;
                 spider.hide();
+                playa.addScore(70);
                 continue;
             }
         if(collision.Scorpion(scorpion.pos(), bullets[n]) && scorpion.visible())
             {
                 bullets.splice(n--, 1);
                 scorpion.hide();
+                playa.addScore(30);
                 continue;
             }
         if(collision.Flea(flea.pos(), bullets[n]) && flea.visible()){
@@ -48,6 +52,7 @@ function update(dTime){
             var newY = Math.floor(centipeed[ind].y / 20);
             shrooms.createShroom(newX, newY);
             peed.killPiece(ind);
+            playa.addScore(100);
             continue;
         }
 
@@ -56,6 +61,7 @@ function update(dTime){
         if (shrooms.existsAt(tileX, tileY)) {
           shrooms.destroyAt(tileX, tileY);
           bullets.splice(n--, 1);
+          playa.addScore(10);
           continue;
         }
         if(bullets[n].y < 0)

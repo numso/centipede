@@ -1,74 +1,95 @@
 var collision = require('./collision');
-var bullets = require('./bullets');
-var inp = require('./input');
-var snd = require('./sounds');
-var players = [];
-var life = 3;
+var bullets   = require('./bullets');
+var inp       = require('./input');
+var snd       = require('./sounds');
+var scores    = require('./states/scores');
+
+var player;
+var score = 0;
+var lives = 3;
 
 function init() {
-  players.length = 0;
-  players.push({
+  score = 0;
+  $('.myScore').text(0);
+
+  player = {
     width: 30,
     height: 50,
     x: 0,
     y: 670,
     dx: .1,
     dy: .1
-  });
+  };
 }
 
 function update(dTime){
-    for(var n = 0; n < players.length; ++n){
-        if(inp.left() && (players[n].x - players[n].dx) > -10){
-            players[n].x -= players[n].dx * dTime;
-            // if(collision.cantMove(mushrooms, players[n]))
-            //     players[n].x += players[n].dx * dTime;
-        }
+  if (inp.left() && (player.x - player.dx) > -10) {
+    player.x -= player.dx * dTime;
+    // if(collision.cantMove(mushrooms, player))
+    //     player.x += player.dx * dTime;
+  }
 
-        if(inp.right() && (players[n].x + players[n].dx) < (500 - players[n].width)){
-            players[n].x += players[n].dx * dTime;
-            // if(collision.cantMove(mushrooms, players[n]))
-            //     players[n].x -= players[n].dx * dTime;
-        }
+  if (inp.right() && (player.x + player.dx) < (500 - player.width)) {
+    player.x += player.dx * dTime;
+    // if(collision.cantMove(mushrooms, player))
+    //     player.x -= player.dx * dTime;
+  }
 
-        if(inp.up() && (players[n].y - players[n].dy) > 550){
-            players[n].y -= players[n].dy * dTime;
-            // if(collision.cantMove(mushrooms, players[n]))
-            //     players[n].y += players[n].dy * dTime;
-        }
+  if (inp.up() && (player.y - player.dy) > 550) {
+    player.y -= player.dy * dTime;
+    // if(collision.cantMove(mushrooms, player))
+    //     player.y += player.dy * dTime;
+  }
 
-        if(inp.down() && (players[n].y + players[n].dy) < (700 - players[n].height)){
-            players[n].y += players[n].dy * dTime;
-            // if(collision.cantMove(mushrooms, players[n]))
-            //     players[n].y -= players[n].dy * dTime;
-        }
+  if (inp.down() && (player.y + player.dy) < (700 - player.height)) {
+    player.y += player.dy * dTime;
+    // if(collision.cantMove(mushrooms, player))
+    //     player.y -= player.dy * dTime;
+  }
 
-        if(inp.fire()) {
-            snd.playEffect('shoot');
-            bullets.add(players[n].x, players[n].y);
-        }
-        if(collision.isDead(players[n]))
-            {
-                players[n].x = 0;
-                players[n].y = 650;
-                gameOver();
-            }
+    if(inp.fire()) {
+        snd.playEffect('shoot');
+        bullets.add(player.x, player.y);
     }
+
+  if (collision.isDead(player)) {
+    player.x = 0;
+    player.y = 650;
+    gameOver();
+  }
+
 };
 
+
 function gameOver(){
-    --life;
-    if(life == 0){
-        
+    --lives;
+    $('.lives').html("Lives: " + lives);
+    if(lives == 0){
+        console.log("your in here!");
+      scores.checkScore($('.myScore').html(), function (hasScore) {
+        if (hasScore) {
+          var resp = prompt('Enter your name');
+          if (resp && resp !== '') {
+            scores.submitScore(resp, score);
+          }
+        }
+      });
+
     }
 }
 
 function render(ctx, g){
-    for(var n = 0; n < players.length; ++n)
-        g.drawPlayer(ctx, players[n].x, players[n].y);
-};
-
+  g.drawPlayer(ctx, player.x, player.y);
+}
 
 exports.init = init;
 exports.update = update;
 exports.render = render;
+
+exports.getScore = function () { return score; };
+exports.addScore = function (inc) {
+  score += inc;
+  $('.myScore').text(score);
+  if (score > parseInt($('.highestScore').text(), 10))
+    $('.highestScore').text(score);
+};
