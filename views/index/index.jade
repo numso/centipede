@@ -16,3 +16,11 @@ block content
       include ../public/credits
 
   .user-obj= JSON.stringify(user)
+
+append scripts
+  script(src='/js/lib/howler.js')
+  script(src='/js/lib/qrcode.js')
+  script(src='/js/lib/impress.js')
+  script
+    impress().init();
+  script(src='/js/app.js')

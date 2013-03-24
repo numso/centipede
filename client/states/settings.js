@@ -6,7 +6,6 @@ var shared = require('../shared')
 function init() {
   getUser();
   bindHandlers();
-  createQR('QRRFZ');
 }
 
 function getUser() {
@@ -51,6 +50,7 @@ function createQR(id) {
 exports.str  = 'slide-settings';
 exports.init = init;
 exports.unbindDialog = removeDialog;
+exports.createQR = createQR;
 
 function showDialog(key, $this) {
   removeDialog();

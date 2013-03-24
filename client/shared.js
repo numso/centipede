@@ -18,3 +18,4 @@ exports.setState       = setState;
 exports.nop            = nop;
 exports.scores         = [];
 exports.user           = {};
+exports.netPlayers     = {};

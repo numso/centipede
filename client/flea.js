@@ -1,7 +1,7 @@
 var shrooms = ('./require');
 var flea;
 
-function init(){
+function init(attract) {
     flea = {
         dir: "right",
         visible: true,
@@ -14,8 +14,12 @@ function init(){
         x: Math.floor(Math.random() * 25) * 20,
         y: 550,
         dx: .1,
-        dy: .1
+        dy: .1,
+        maxY: 700 - 20
     };
+
+    if (attract)
+      flea.maxY -= 50;
 }
 //to place a mushroom send in Math.floor x / 20 and y /20;
 
@@ -35,8 +39,8 @@ function update(dTime){
     flea.dx *= -1;
   }
 
-  if (flea.y > 700 - flea.height) {
-    flea.y = 700 - flea.height;
+  if (flea.y > flea.maxY) {
+    flea.y = flea.maxY;
     flea.dy *= -1;
   }
 

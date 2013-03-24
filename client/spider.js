@@ -2,7 +2,7 @@ var shrooms = require('./shrooms');
 
 var spider;
 
-function init() {
+function init(attract) {
   spider = {
     time:       0,
     deathTimer: 0,
@@ -13,8 +13,11 @@ function init() {
     x:          100,
     y:          350,
     dx:         .2,
-    dy:         .2
+    dy:         .2,
+    maxY:       700 - 40
   };
+
+  if (attract) spider.maxY -= 50;
 }
 
 function update(dTime) {
@@ -33,8 +36,8 @@ function update(dTime) {
     spider.dx *= -1;
   }
 
-  if (spider.y > 700 - spider.height) {
-    spider.y = 700 - spider.height;
+  if (spider.y > spider.maxY) {
+    spider.y = spider.maxY;
     spider.dy *= -1;
   }
 
