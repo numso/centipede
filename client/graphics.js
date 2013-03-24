@@ -41,6 +41,13 @@ function drawScorpion(LtoR, ctx, x, y){
   ctx.drawImage(spriteSheet, 300, 0, 50, 50, x, y, 20, 20);
 }
 
+function drawFlea(ctx, dir, x, y){
+  if(dir == 'right')
+    ctx.drawImage(spriteSheet, 350, 150, 50, 50, x, y, 20, 20);
+  if(dir == 'left')
+    ctx.drawImage(spriteSheet, 400, 150, 50, 50, x, y, 20, 20);
+};
+
 function drawPeed(ctx, isHead, RtoL, x, y) {
   if (RtoL) {
     if (isHead)
@@ -64,4 +71,5 @@ exports.drawMushrooms = drawMushrooms;
 exports.drawSpider =    drawSpider;
 exports.drawScorpion =  drawScorpion;
 exports.drawPeed = drawPeed;
+exports.drawFlea = drawFlea;
 exports.init =          init;
