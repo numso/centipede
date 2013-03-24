@@ -66,6 +66,5 @@ function submitScore(req, res, next) {
       return res.send(data);
     }
   }
-
   res.send(false);
 }

@@ -7,13 +7,36 @@ var menu     = require('./menu')
   , sounds   = require('../sounds')
   ;
 
+var attractTimer = 0;
+
 function init() {
   bindHandlers();
+  bindAttractHandlers();
+}
+
+function start() {
+  attractTimer = 0;
+}
+
+function update(dTime) {
+  attractTimer += dTime;
+
+  if (attractTimer >= 15000) {
+    game.attract(true);
+    shared.setState(game);
+  }
+}
+
+function bindAttractHandlers() {
+  $('body').bind('click.attractIn', function (e) { attractTimer = 0; });
+  $('body').bind('keypress.attractIn', function (e) { attractTimer = 0; });
+  $('body').bind('mousemove.attractIn', function (e) { attractTimer = 0; });
 }
 
 function bindHandlers() {
   $('#game').click(function () {
     sounds.playEffect();
+    game.attract(false);
     shared.setState(game);
   });
 
@@ -47,3 +70,6 @@ function bindHandlers() {
 
 exports.str  = 'slide-menu';
 exports.init = init;
+exports.start = start;
+exports.update = update;
+

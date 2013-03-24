@@ -10,7 +10,7 @@ function checkScore(score, cb) {
 function submitScore(score, name) {
   $.post('/submitScore', { score: score, name: name }, function (data) {
     if (data) {
-      jadify('components/score-table', { scores: data });
+      $('.all-scores').html(jadify('components/score-table', { scores: data }));
     }
   });
 }

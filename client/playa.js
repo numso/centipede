@@ -3,14 +3,22 @@ var bullets   = require('./bullets');
 var inp       = require('./input');
 var snd       = require('./sounds');
 var scores    = require('./states/scores');
+var menu      = require('./states/menu');
+var shared    = require('./shared');
+var peed      = require('./centipede').getPeed;
 
 var player;
 var score = 0;
 var lives = 3;
 
+var attract = {};
+
 function init() {
   score = 0;
-  $('.myScore').text(0);
+  lives = 3;
+  $('.myScore').text(score);
+  $('.lives').html("Lives: " + lives);
+  inp.resetKeys();
 
   player = {
     width: 30,
@@ -20,6 +28,11 @@ function init() {
     dx: .1,
     dy: .1
   };
+
+  attract.shootTime = 0;
+  attract.aliveTime = 0;
+  attract.direction = 1;
+  attract.dirChangeTime = 0;
 }
 
 function update(dTime){
@@ -57,24 +70,52 @@ function update(dTime){
     player.y = 650;
     gameOver();
   }
-
 };
+
+function updateAttract(dTime) {
+  attract.shootTime += dTime;
+  attract.aliveTime += dTime;
+  attract.dirChangeTime += dTime;
+
+  if (attract.shootTime >= 300 && peed().length > 3) {
+    snd.playEffect('shoot');
+    bullets.add(player.x, player.y);
+    attract.shootTime = 0;
+  }
+
+  if (attract.aliveTime > 60000 && (player.y - player.dy) > 550) {
+    player.y -= player.dy * dTime;
+  }
+
+  if (attract.dirChangeTime > 3000) {
+    attract.direction = Math.round(Math.random() * 2) - 1;
+    attract.dirChangeTime = 0;
+  }
+
+  player.x += attract.direction * player.dx * dTime;
+  if (player.x > 500 - player.width)
+    player.x = 500 - player.width;
+  if (player.x < -10)
+    player.x = -10
+
+  if (collision.isDead(player)) {
+    shared.setState(menu);
+  }
+}
 
 
 function gameOver(){
     --lives;
     $('.lives').html("Lives: " + lives);
     if(lives == 0){
-        console.log("your in here!");
-      scores.checkScore($('.myScore').html(), function (hasScore) {
+      scores.checkScore(score, function (hasScore) {
         if (hasScore) {
           var resp = prompt('Enter your name');
-          if (resp && resp !== '') {
-            scores.submitScore(resp, score);
-          }
+          if (resp && resp !== '')
+            scores.submitScore(score, resp);
         }
+        shared.setState(menu);
       });
-
     }
 }
 
@@ -85,6 +126,7 @@ function render(ctx, g){
 exports.init = init;
 exports.update = update;
 exports.render = render;
+exports.attract = updateAttract;
 
 exports.getScore = function () { return score; };
 exports.addScore = function (inc) {
