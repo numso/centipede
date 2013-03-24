@@ -1,15 +1,18 @@
-var shared = require('../shared');
+var shared = require('../shared')
+  , jadify = require('../requires/render');
 
-function checkScore(score, name, cb) {
-  // $.post('/newScore', { score: score, name: name }, function (data) {
-  //   cb(false);
-  // });
+function checkScore(score, cb) {
+  $.post('/checkScore', { score: score }, function (data) {
+    cb(data);
+  });
 }
 
-function submitScore(score, name, cb) {
-  // $.post('/newScore', { score: score, name: name }, function (data) {
-  //   cb(false);
-  // });
+function submitScore(score, name) {
+  $.post('/submitScore', { score: score, name: name }, function (data) {
+    if (data) {
+      jadify('components/score-table', { scores: data });
+    }
+  });
 }
 
 exports.str         = 'slide-scores';
