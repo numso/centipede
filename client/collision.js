@@ -1,4 +1,7 @@
-var spider = require('./spider'), flea = require('./flea');
+var spider = require('./spider')
+, flea = require('./flea')
+, peed = require('./centipede')
+;
 function collides(obj1, obj2){
     if(obj2.x + obj2.width  > obj1.x && obj2.x < obj1.x + obj1.width)
         if(obj2.y + obj2.height  > obj1.y && obj2.y < obj1.y + obj1.height)
@@ -11,7 +14,6 @@ function centipedeMushroom(centipede, mushrooms){
     for(var n = 0; n < mushrooms.length; ++n){
         if(collides(mushrooms[n], centipede))
             {
-                console.log("collision");
                 return true;
             }
     }
@@ -67,7 +69,12 @@ function checkPoison(mushrooms, poison, scorpion){
 };
 
 function isDead(thisChar){
-     return (collides(spider.pos(), thisChar) && spider.visible || collides(flea.pos(), thisChar) && flea.visible);
+    var thisPeed = peed.getPeed();
+    for(var n = 0; n < thisPeed.length; ++n){
+        if(collides(thisPeed[n], thisChar))
+            return true;
+    }
+     return (collides(spider.pos(), thisChar) && spider.visible()) || (collides(flea.pos(), thisChar) && flea.visible());
 };
 
 function cantMove(mushrooms, thisChar){

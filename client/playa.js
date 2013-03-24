@@ -3,6 +3,7 @@ var bullets = require('./bullets');
 var inp = require('./input');
 var snd = require('./sounds');
 var players = [];
+var life = 3;
 
 function init() {
   players.length = 0;
@@ -50,9 +51,17 @@ function update(dTime){
             {
                 players[n].x = 0;
                 players[n].y = 650;
+                gameOver();
             }
     }
 };
+
+function gameOver(){
+    --life;
+    if(life == 0){
+        
+    }
+}
 
 function render(ctx, g){
     for(var n = 0; n < players.length; ++n)

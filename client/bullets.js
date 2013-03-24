@@ -35,7 +35,6 @@ function update(dTime){
                 continue;
             }
         if(collision.Flea(flea.pos(), bullets[n]) && flea.visible()){
-            console.log("flea collision");
             bullets.splice(n--, 1);
             flea.hide();
             continue;
