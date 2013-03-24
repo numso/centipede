@@ -3,7 +3,8 @@ var spider = require('./spider')
 ,   scorpion = require('./scorpion')
 ,   peed = require('./centipede')
 ,   collision = require('./collision')
-  , shrooms   = require('./shrooms')
+,   shrooms   = require('./shrooms')
+,   flea = require('./flea')
 ;
 
 function add(x, y){
@@ -30,10 +31,15 @@ function update(dTime){
         if(collision.Scorpion(scorpion.pos(), bullets[n]) && scorpion.visible())
             {
                 bullets.splice(n--, 1);
-                --n;
                 scorpion.hide();
                 continue;
             }
+        if(collision.Flea(flea.pos(), bullets[n]) && flea.visible()){
+            console.log("flea collision");
+            bullets.splice(n--, 1);
+            flea.hide();
+            continue;
+        }
 
         var centipeed = peed.getPeed();
         var ind = collision.Peed(bullets[n], centipeed);

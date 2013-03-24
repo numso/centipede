@@ -46,11 +46,11 @@ function update(dTime){
             snd.playEffect('shoot');
             bullets.add(players[n].x, players[n].y);
         }
-        // if(collision.isDead(spider, players[n]))
-        //     {
-        //         players[n].x = 0;
-        //         players[n].y = 650;
-        //     }
+        if(collision.isDead(players[n]))
+            {
+                players[n].x = 0;
+                players[n].y = 650;
+            }
     }
 };
 

@@ -1,3 +1,4 @@
+var spider = require('./spider'), flea = require('./flea');
 function collides(obj1, obj2){
     if(obj2.x + obj2.width  > obj1.x && obj2.x < obj1.x + obj1.width)
         if(obj2.y + obj2.height  > obj1.y && obj2.y < obj1.y + obj1.height)
@@ -65,8 +66,8 @@ function checkPoison(mushrooms, poison, scorpion){
     }
 };
 
-function isDead(spider, thisChar){
-     return (collides(spider, thisChar) && spider.visible);
+function isDead(thisChar){
+     return (collides(spider.pos(), thisChar) && spider.visible || collides(flea.pos(), thisChar) && flea.visible);
 };
 
 function cantMove(mushrooms, thisChar){
@@ -81,6 +82,7 @@ exports.Mush = Mush;
 exports.Poison = Poison;
 exports.Spider = collides;
 exports.Scorpion = collides;
+exports.Flea = collides;
 exports.Peed = Peed
 exports.checkPoison = checkPoison;
 exports.isDead = isDead;
