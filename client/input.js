@@ -16,7 +16,7 @@ exports.down  = function () { return keys[40]; };
 
 exports.fire = function () {
   if (keys[32] && canFire) {
-    setTimeout(function () { canFire = true; }, 800);
+    setTimeout(function () { canFire = true; }, 400);
     canFire = false;
     return true;
   }

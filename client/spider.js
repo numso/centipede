@@ -1,73 +1,94 @@
+var shrooms = require('./shrooms');
+
 var spider;
 
-function init(){
-    spider = {
-        time: 0,
-        deathTimer: 0,
-        visible: true,
-        width: 40,
-        height: 40,
-        x: 1,
-        y: 450,
-        dx: .2,
-        dy: .2
-    };  
-};
+function init() {
+  spider = {
+    time:       0,
+    deathTimer: 0,
+    visible:    true,
+    width:      40,
+    height:     40,
+    hungry:     0,
+    x:          100,
+    y:          350,
+    dx:         .2,
+    dy:         .2
+  };
+}
 
-function update(dTime){
-    if(spider.x > 0 && spider.x < (500 - spider.width))
-        spider.x += spider.dx * dTime;
-    else
-        {
-            spider.dx *= -1;
-            spider.x += spider.dx * dTime;
-        }
+function update(dTime) {
+  spider.x += spider.dx * dTime;
+  spider.y += spider.dy * dTime;
+  spider.time += dTime;
+  spider.hungry += dTime;
 
-    if(spider.y + spider.height < 700 && spider.y > 449)
-        spider.y -= spider.dy * dTime;
-    else{
-        spider.dy *= -1;
-        spider.y -= spider.dy * dTime;
+  if (spider.x < 0) {
+    spider.x = 0;
+    spider.dx *= -1;
+  }
+
+  if (spider.x > 500 - spider.width) {
+    spider.x = 500 - spider.width;
+    spider.dx *= -1;
+  }
+
+  if (spider.y > 700 - spider.height) {
+    spider.y = 700 - spider.height;
+    spider.dy *= -1;
+  }
+
+  if (spider.y < 300) {
+    spider.y = 300;
+    spider.dy *= -1;
+  }
+
+  if (spider.time >= 2000) {
+    spider.time = 0;
+    spider.dx = (Math.random() * .4) - .2;
+    spider.dy = (Math.random() * .4) - .2;
+  }
+
+  if (!spider.visible) {
+    spider.deathTimer += dTime;
+    if (spider.deathTimer >= 10000) {
+      spider.visible = true;
+      spider.deathTimer = 0;
+      spider.y = 350;
+      spider.x = Math.floor(Math.random() * (500 - spider.width));
     }
+  }
 
-    spider.time += dTime;
-    if(spider.time >= 2000){
-        spider.time = 0;
-        spider.dx = (Math.random() * .4) -.2;
-        spider.dy = (Math.random() * .4) -.2;
+  if (spider.visible && spider.hungry >= 5000) {
+    var tileX = Math.floor(spider.x / 20) + 1;
+    var tileY = Math.floor(spider.y / 20) + 1;
+    if (shrooms.existsAt(tileX, tileY)) {
+      shrooms.eatAt(tileX, tileY);
+      spider.hungry = 0;
     }
+  }
+}
 
-    if(!spider.visible){
-        spider.deathTimer += dTime;
-        if(spider.deathTimer >= 10000){
-            spider.visible = true;
-            spider.deathTimer = 0;
-            spider.y = Math.floor(Math.random() * 50) + 500;
-        }  
-    }
-};
+function render(ctx, g) {
+  if (spider.visible)
+    g.drawSpider(ctx, spider.x, spider.y);
+}
 
-function render(ctx, g){
-    if(spider.visible)
-        g.drawSpider(ctx, spider.x, spider.y);
-};
+function pos() {
+  return {x: spider.x, y: spider.y, width: spider.width, height: spider.height};
+}
 
-function pos(){
-    return {x: spider.x, y: spider.y, width: spider.width, height: spider.height};
-};
+function hide() {
+  spider.visible = false;
+}
 
-function hide(){
-    spider.visible = false;
-};
+function visible() {
+  return spider.visible;
+}
 
-function visible(){
-    return spider.visible;
-};
-
-
-exports.init = init;
-exports.update = update;
-exports.render = render;
-exports.pos = pos;
-exports.hide = hide;
+exports.init    = init;
+exports.update  = update;
+exports.render  = render;
+exports.pos     = pos;
+exports.hide    = hide;
 exports.visible = visible;

@@ -42,6 +42,13 @@ function destroyAt(x, y) {
   return true;
 }
 
+function eatAt(x, y) {
+  if (x < 0 || x >= WIDTH) return false;
+  if (!shrooms[x][y]) return false;
+  delete shrooms[x][y];
+  return true;
+}
+
 function existsAt(x, y) {
   if (x < 0 || x >= WIDTH) return false;
   return !!shrooms[x][y];
@@ -75,3 +82,4 @@ exports.existsAt  = existsAt;
 exports.poisonAt  = poisonAt;
 exports.existsPoisonAt = existsPoisonAt;
 exports.createShroom   = createShroom;
+exports.eatAt   = eatAt;

@@ -48,16 +48,16 @@ function drawFlea(ctx, dir, x, y){
     ctx.drawImage(spriteSheet, 400, 150, 50, 50, x, y, 20, 20);
 };
 
-function drawPeed(ctx, isHead, RtoL, x, y) {
+function drawPeed(ctx, isHead, RtoL, x, y, state) {
   if (RtoL) {
     if (isHead)
-      return ctx.drawImage(spriteSheet, 150, 100, 50, 50, x, y, 20, 20);
-    return ctx.drawImage(spriteSheet, 150, 150, 50, 50, x, y, 20, 20);
+      return ctx.drawImage(spriteSheet, 150 + state * 50, 100, 50, 50, x, y, 20, 20);
+    return ctx.drawImage(spriteSheet, 150 + state * 50, 150, 50, 50, x, y, 20, 20);
   }
 
   if (isHead)
-    return ctx.drawImage(spriteSheet, 0, 100, 50, 50, x, y, 20, 20);
-  ctx.drawImage(spriteSheet, 0, 150, 50, 50, x, y, 20, 20);
+    return ctx.drawImage(spriteSheet, 0 + state * 50, 100, 50, 50, x, y, 20, 20);
+  ctx.drawImage(spriteSheet, 0 + state * 50, 150, 50, 50, x, y, 20, 20);
 }
 
 function init(){
