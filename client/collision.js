@@ -1,5 +1,5 @@
 var spider = require('./spider')
-  , flea   = require('./flea');
+  , flea   = require('./flea')
   , peed   = require('./centipede')
   ;
 
