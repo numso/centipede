@@ -42,13 +42,12 @@ function update(dTime){
 function render(ctx){
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, 500, 700);
+    shrooms.render(ctx, g);
     playa.render(ctx, g);
     bullets.render(ctx, g);
     spider.render(ctx, g);
     scorpion.render(ctx, g);
     centipede.render(ctx, g);
-    shrooms.render(ctx, g);
-
 };
 
 exports.start  = start;

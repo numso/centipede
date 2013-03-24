@@ -45,6 +45,15 @@ function Poison(poison, thisBullet){
     return false;
 };
 
+function Peed(bullet, peed) {
+  for (var j = 0; j < peed.length; ++j) {
+    if (collides(bullet, peed[j])) {
+      return j;
+    }
+  }
+  return -1;
+}
+
 function checkPoison(mushrooms, poison, scorpion){
     for(var n = 0; n < mushrooms.length; ++n)
     {
@@ -72,6 +81,7 @@ exports.Mush = Mush;
 exports.Poison = Poison;
 exports.Spider = collides;
 exports.Scorpion = collides;
+exports.Peed = Peed
 exports.checkPoison = checkPoison;
 exports.isDead = isDead;
 exports.cantMove = cantMove;

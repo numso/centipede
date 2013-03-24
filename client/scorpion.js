@@ -9,7 +9,7 @@ function init(){
         goingRight: true,
         width: 20,
         height: 20,
-        x: -100,
+        x: -400,
         y: Math.floor(Math.random() * 25) * 20,
         dx: .1
     };

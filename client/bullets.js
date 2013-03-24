@@ -1,7 +1,7 @@
 var bullets = [];
 var spider = require('./spider')
 ,   scorpion = require('./scorpion')
-,   centipede = require('./centipede')
+,   peed = require('./centipede')
 ,   collision = require('./collision')
   , shrooms   = require('./shrooms')
 ;
@@ -34,6 +34,18 @@ function update(dTime){
                 scorpion.hide();
                 continue;
             }
+
+        var centipeed = peed.getPeed();
+        var ind = collision.Peed(bullets[n], centipeed);
+        if (ind !== -1) {
+            bullets.splice(n--, 1);
+            var newX = Math.floor(centipeed[ind].x / 20);
+            var newY = Math.floor(centipeed[ind].y / 20);
+            shrooms.createShroom(newX, newY);
+            peed.killPiece(ind);
+            continue;
+        }
+
         var tileX = Math.floor(bullets[n].x / 20);
         var tileY = Math.round(bullets[n].y / 20);
         if (shrooms.existsAt(tileX, tileY)) {

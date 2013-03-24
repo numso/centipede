@@ -1,86 +1,99 @@
-var centipede;
-var bodyLength = 12;
-var position = 200;
-var direction = 'right';
+var NUM_PIECES = 12;
 
-function init(){
-    centipede = {
-        width: 20,
-        height: 20,
-        body: createBody(20, 20),
-        dy: .1
-    };
-};
+var shrooms = require('./shrooms');
 
-function createBody(width, height){
-    var newBody = [];
-    var piece;
+var peed = [];
 
-    for(var n = 0; n < bodyLength; ++n){
-        if(n == 0)
-            piece = 'head';
-        else
-            piece = 'body';
+function init() {
+  peed.length = 0;
 
-        var obj = {
-            type: piece,
-            direction: 'left',
-            dropFlag: false,
-            dropCount: 0,
-            x: position,
-            y: 0,
-            width: width,
-            height: height,
-            dx: .1
+  for (var i = 0; i < NUM_PIECES; ++i) {
+    peed.push({
+      isHead: (i === 0),
+      goingLeft: true,
+      x: 300 + i * 16,
+      y: 0,
+      width:  16,
+      height: 20,
+      dx: -.1,
+      dy: 0,
+      next: 0
+    });
+  }
+}
+
+function update(dTime) {
+  for (var i = 0; i < peed.length; ++i) {
+
+    if (peed[i].dy !== 0) { // moving down
+      peed[i].y += peed[i].dy * dTime;
+
+      if (peed[i].y === peed[i].next) {
+        peed[i].y = peed[i].next;
+        peed[i].dy = 0;
+      }
+
+    } else { // moving over
+      peed[i].x += peed[i].dx * dTime;
+
+      if (peed[i].x < 0) {
+        peed[i].x = 0;
+        hitWall(i);
+      }
+
+      if (peed[i].x > 500 - peed[i].width) {
+        peed[i].x = 500 - peed[i].width;
+        hitWall(i);
+      }
+
+      var tileX = Math.floor(peed[i].x / 20);
+      var tileY = Math.floor(peed[i].y / 20);
+      if (!peed[i].goingLeft) tileX += 1;
+
+      if (shrooms.existsAt(tileX, tileY)) {
+        hitWall(i);
+
+        if (shrooms.existsPoisonAt(tileX, tileY)) {
+          peed[i].next = 680;
         }
-        newBody.push(obj);
-
-        position += width;
+      }
     }
-    return newBody;
-};
+  }
+}
 
-function update(dTime){
-    for (var n = 0; n < centipede.body.length; ++n){
-        if (centipede.body[n].x > 0 && centipede.body[n].x < (500 - centipede.width) && centipede.body[n].dropFlag == false){
-            // if(collision.centipedeMushroom(centipede.body[n], mushrooms))
-            //     centipede.body[n].dropFlag = true;
-            // else
-                centipede.body[n].x -= centipede.body[n].dx * dTime;
-        }
-        else {
-            if (centipede.body[n].dropCount > centipede.height){
-                centipede.body[n].dx *= -1;
-                centipede.body[n].x -= centipede.body[n].dx * dTime;
-                centipede.body[n].dropCount = 0;
-                centipede.body[n].dropFlag = false;
-                if(n == centipede.body.length -1)
-                    setDirection();
-            }
+function hitWall(i) {
+  peed[i].goingLeft = !peed[i].goingLeft;
+  peed[i].dx *= -1;
 
-            else {
-                centipede.body[n].direction = direction;
-                centipede.body[n].dropCount += centipede.dy * dTime;
-                centipede.body[n].y += centipede.dy * dTime;
-            }
-        }
-    }
-};
+  if (peed[i].y === 680) {
+    peed[i].dy = -.1;
+    peed[i].next = 560;
+  } else {
+    peed[i].dy = .1;
+    peed[i].next += 20;
+  }
+}
 
-function setDirection(){
-    if(direction == 'left')
-        direction = 'right';
-    else if(direction == 'right')
-        direction = 'left';
-    return;
-};
-
-function render(ctx, g){
-    for(var n = 0; n < centipede.body.length; ++n){
-        g.drawCentipede(centipede.body[n].type, centipede.body[n].direction, ctx, centipede.body[n].x, centipede.body[n].y);
-    }
-};
+function render(ctx, g) {
+  for (var i = 0; i < peed.length; ++i)
+    g.drawPeed(ctx, peed[i].isHead, peed[i].goingLeft, peed[i].x, peed[i].y);
+}
 
 exports.init = init;
 exports.update = update;
 exports.render = render;
+exports.getPeed = function () {
+  return peed;
+};
+
+exports.killPiece = function (ind) {
+
+  if (ind < peed.length - 1)
+    peed[ind + 1].isHead = true;
+  peed.splice(ind, 1);
+
+  if (peed.length === 0) {
+    init();
+  }
+};
+

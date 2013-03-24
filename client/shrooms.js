@@ -47,6 +47,10 @@ function existsAt(x, y) {
   return !!shrooms[x][y];
 }
 
+function existsPoisonAt(x, y) {
+  return shrooms[x][y].poisoned;
+}
+
 function poisonAt(x, y) {
   if (x < 0 || x >= WIDTH) return false;
   if (!shrooms[x][y]) return false;
@@ -54,8 +58,20 @@ function poisonAt(x, y) {
   return true;
 }
 
+function createShroom(x, y) {
+  if(!!shrooms[x][y]) return false;
+  shrooms[x][y] = {
+    health: 4,
+    poisoned: false,
+    x: x,
+    y: y
+  }
+}
+
 exports.init      = init;
 exports.render    = render;
 exports.destroyAt = destroyAt;
 exports.existsAt  = existsAt;
 exports.poisonAt  = poisonAt;
+exports.existsPoisonAt = existsPoisonAt;
+exports.createShroom   = createShroom;

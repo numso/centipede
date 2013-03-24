@@ -37,26 +37,21 @@ function drawSpider(ctx, x, y){
 };
 
 function drawScorpion(LtoR, ctx, x, y){
-    if (LtoR)
-        ctx.drawImage(spriteSheet, 150, 0, 50, 50, x, y, 20, 20);
-    else
-        ctx.drawImage(spriteSheet, 300, 0, 50, 50, x, y, 20, 20);
-};
+  if (LtoR) return ctx.drawImage(spriteSheet, 150, 0, 50, 50, x, y, 20, 20);
+  ctx.drawImage(spriteSheet, 300, 0, 50, 50, x, y, 20, 20);
+}
 
-function drawCentipede(type, direction, ctx, x, y){
-    if(direction == 'left'){
-        if(type == 'head')
-            ctx.drawImage(spriteSheet, 150, 100, 50, 50, x, y, 20, 20);
-        if(type == 'body')
-            ctx.drawImage(spriteSheet, 150, 150, 50, 50, x, y, 20, 20);
-    }
-    if(direction == 'right'){
-        if(type == 'head')
-            ctx.drawImage(spriteSheet, 0, 100, 50, 50, x, y, 20, 20);
-        if(type == 'body')
-            ctx.drawImage(spriteSheet, 0, 150, 50, 50, x, y, 20, 20);
-    }
-};
+function drawPeed(ctx, isHead, RtoL, x, y) {
+  if (RtoL) {
+    if (isHead)
+      return ctx.drawImage(spriteSheet, 150, 100, 50, 50, x, y, 20, 20);
+    return ctx.drawImage(spriteSheet, 150, 150, 50, 50, x, y, 20, 20);
+  }
+
+  if (isHead)
+    return ctx.drawImage(spriteSheet, 0, 100, 50, 50, x, y, 20, 20);
+  ctx.drawImage(spriteSheet, 0, 150, 50, 50, x, y, 20, 20);
+}
 
 function init(){
     spriteSheet = document.createElement('img');
@@ -68,5 +63,5 @@ exports.drawBullet =    drawBullet;
 exports.drawMushrooms = drawMushrooms;
 exports.drawSpider =    drawSpider;
 exports.drawScorpion =  drawScorpion;
-exports.drawCentipede = drawCentipede;
+exports.drawPeed = drawPeed;
 exports.init =          init;
