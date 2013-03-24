@@ -1,46 +1,51 @@
-var collision = require('./collision');
+var collision = require('./collision')
+  , shrooms   = require('./shrooms');
+
 var scorpion;
 
 function init(){
     scorpion = {
         visible: true,
-        direction: 'right',
+        goingRight: true,
         width: 20,
         height: 20,
-        x: 1,
-        y: Math.floor(Math.random() * 600),
+        x: -100,
+        y: Math.floor(Math.random() * 25) * 20,
         dx: .1
-    };    
+    };
 };
 
 function update(dTime){
     if(scorpion.visible){
-        if(scorpion.x > 0 && scorpion.x < (500 - scorpion.width))
-            {
-                scorpion.x += scorpion.dx * dTime;
-                //collision.checkPoison(scorpion);
-            }
-        else
-        {
-            setDirection(scorpion);
-            scorpion.dx *= -1;
-            scorpion.x += scorpion.dx * dTime;
-            scorpion.y = Math.floor(Math.random() * 550 - scorpion.height);
+        scorpion.x += scorpion.dx * dTime;
+
+        if (scorpion.x < -400) {
+            scorpion.x = -400;
+            randomizePos();
+        }
+
+        if (scorpion.x > 900) {
+            scorpion.x = 900;
+            randomizePos();
+        }
+
+        var tileX = Math.floor(scorpion.x/20);
+        var tileY = Math.floor(scorpion.y/20);
+        if (shrooms.existsAt(tileX, tileY)) {
+          shrooms.poisonAt(tileX, tileY);
         }
     }
 };
 
+function randomizePos() {
+  scorpion.goingRight = !scorpion.goingRight;
+  scorpion.dx *= -1;
+  scorpion.y = Math.floor(Math.random() * 25) * 20;
+}
+
 function render(ctx, g){
     if(scorpion.visible)
-        g.drawScorpion(scorpion.direction, ctx, scorpion.x, scorpion.y);
-};
-
-function setDirection(changeMe){
-    if(changeMe.direction == 'left')
-        changeMe.direction = 'right';
-    else if(changeMe.direction == 'right')
-        changeMe.direction = 'left';
-    return;
+        g.drawScorpion(scorpion.goingRight, ctx, scorpion.x, scorpion.y);
 };
 
 function pos(){

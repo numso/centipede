@@ -27,7 +27,7 @@ function init(){
     spider.init();
     scorpion.init();
     centipede.init();
-    // shrooms.init();
+    shrooms.init();
 };
 
 function update(dTime){
@@ -47,7 +47,7 @@ function render(ctx){
     spider.render(ctx, g);
     scorpion.render(ctx, g);
     centipede.render(ctx, g);
-    // shrooms.render(ctx, g);
+    shrooms.render(ctx, g);
 
 };
 

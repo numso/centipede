@@ -3,6 +3,7 @@ var spider = require('./spider')
 ,   scorpion = require('./scorpion')
 ,   centipede = require('./centipede')
 ,   collision = require('./collision')
+  , shrooms   = require('./shrooms')
 ;
 
 function add(x, y){
@@ -28,17 +29,18 @@ function update(dTime){
             }
         if(collision.Scorpion(scorpion.pos(), bullets[n]) && scorpion.visible())
             {
-                bullets.splice(n, 1);
+                bullets.splice(n--, 1);
                 --n;
                 scorpion.hide();
                 continue;
             }
-        // if(collision.Mush(bullets[n]))
-        //     {
-        //         bullets.splice(n, 1);
-        //         --n;
-        //         continue;
-        //     }
+        var tileX = Math.floor(bullets[n].x / 20);
+        var tileY = Math.round(bullets[n].y / 20);
+        if (shrooms.existsAt(tileX, tileY)) {
+          shrooms.destroyAt(tileX, tileY);
+          bullets.splice(n--, 1);
+          continue;
+        }
         if(bullets[n].y < 0)
             {
                 bullets.splice(n, 1);

@@ -8,26 +8,26 @@ function drawBullet(ctx, x, y){
     ctx.drawImage(spriteSheet, 341, 185, 4, 10, x, y, 4, 10);
 };
 
-function drawMushrooms(num, type, ctx, x, y){
-if(type == 'shroom'){    
+function drawMushrooms(num, poison, ctx, x, y){
+if(!poison){
     if(num == 4)
-        ctx.drawImage(spriteSheet, 200, 50, 50, 50, x, y, 20, 20);
+        ctx.drawImage(spriteSheet, 200, 50, 50, 50, x * 20, y * 20, 20, 20);
     if(num == 3)
-        ctx.drawImage(spriteSheet, 250, 50, 50, 50, x, y, 20, 20);
+        ctx.drawImage(spriteSheet, 250, 50, 50, 50, x * 20, y * 20, 20, 20);
     if(num == 2)
-        ctx.drawImage(spriteSheet, 300, 50, 50, 50, x, y, 20, 20);
+        ctx.drawImage(spriteSheet, 300, 50, 50, 50, x * 20, y * 20, 20, 20);
     if(num == 1)
-        ctx.drawImage(spriteSheet, 350, 50, 50, 50, x, y, 20, 20);
+        ctx.drawImage(spriteSheet, 350, 50, 50, 50, x * 20, y * 20, 20, 20);
 }
-if(type == 'poison'){
+if(poison){
     if(num == 4)
-        ctx.drawImage(spriteSheet, 0, 50, 50, 50, x, y, 20, 20);
+        ctx.drawImage(spriteSheet, 0, 50, 50, 50, x * 20, y * 20, 20, 20);
     if(num == 3)
-        ctx.drawImage(spriteSheet, 100, 50, 50, 50, x, y, 20, 20);
+        ctx.drawImage(spriteSheet, 100, 50, 50, 50, x * 20, y * 20, 20, 20);
     if(num == 2)
-        ctx.drawImage(spriteSheet, 50, 50, 50, 50, x, y, 20, 20);
+        ctx.drawImage(spriteSheet, 50, 50, 50, 50, x * 20, y * 20, 20, 20);
     if(num == 1)
-        ctx.drawImage(spriteSheet, 150, 50, 50, 50, x, y, 20, 20); 
+        ctx.drawImage(spriteSheet, 150, 50, 50, 50, x * 20, y * 20, 20, 20);
 }
 
 };
@@ -36,15 +36,15 @@ function drawSpider(ctx, x, y){
     ctx.drawImage(spriteSheet, 50, 0, 50, 50, x, y, 40, 40);
 };
 
-function drawScorpion(direction, ctx, x, y){
-    if(direction == 'right')
+function drawScorpion(LtoR, ctx, x, y){
+    if (LtoR)
         ctx.drawImage(spriteSheet, 150, 0, 50, 50, x, y, 20, 20);
-    if(direction == 'left')
+    else
         ctx.drawImage(spriteSheet, 300, 0, 50, 50, x, y, 20, 20);
 };
 
 function drawCentipede(type, direction, ctx, x, y){
-    if(direction == 'left'){    
+    if(direction == 'left'){
         if(type == 'head')
             ctx.drawImage(spriteSheet, 150, 100, 50, 50, x, y, 20, 20);
         if(type == 'body')
