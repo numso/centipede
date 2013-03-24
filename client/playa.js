@@ -2,9 +2,11 @@ var collision = require('./collision');
 var bullets   = require('./bullets');
 var inp       = require('./input');
 var snd       = require('./sounds');
+var scores    = require('./states/scores');
 
 var player;
 var score = 0;
+var lives = 3;
 
 function init() {
   score = 0;
@@ -45,15 +47,35 @@ function update(dTime){
     //     player.y -= player.dy * dTime;
   }
 
-  if (inp.fire()) {
-    snd.playEffect('shoot');
-    bullets.add(player.x, player.y);
-  }
+    if(inp.fire()) {
+        snd.playEffect('shoot');
+        bullets.add(player.x, player.y);
+    }
 
   if (collision.isDead(player)) {
     player.x = 0;
     player.y = 650;
+    gameOver();
   }
+
+};
+
+
+function gameOver(){
+    --lives;
+    $('.lives').html("Lives: " + lives);
+    if(lives == 0){
+        console.log("your in here!");
+      scores.checkScore($('.myScore').html(), function (hasScore) {
+        if (hasScore) {
+          var resp = prompt('Enter your name');
+          if (resp && resp !== '') {
+            scores.submitScore(resp, score);
+          }
+        }
+      });
+
+    }
 }
 
 function render(ctx, g){
