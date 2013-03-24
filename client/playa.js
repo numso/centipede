@@ -4,18 +4,17 @@ var inp = require('./input');
 var snd = require('./sounds');
 var players = [];
 
-function init(num){
-    for(var n = 0; n < num; ++n){
-        players.push({
-            width: 30,
-            height: 50,
-            x: 0,
-            y: 670,
-            dx: .1,
-            dy: .1
-        });
-    }
-};
+function init() {
+  players.length = 0;
+  players.push({
+    width: 30,
+    height: 50,
+    x: 0,
+    y: 670,
+    dx: .1,
+    dy: .1
+  });
+}
 
 function update(dTime){
     for(var n = 0; n < players.length; ++n){

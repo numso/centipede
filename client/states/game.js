@@ -16,19 +16,19 @@ var jadify = require('../requires/render')
 
 function start() {
   snd.playMusic('game');
+
+  playa.init();
+  spider.init();
+  scorpion.init();
+  centipede.init();
+  shrooms.init();
 }
 
 function stop() {
   snd.playMusic();
 }
 
-function init(){
-    playa.init(1);
-    spider.init();
-    scorpion.init();
-    centipede.init();
-    shrooms.init();
-};
+function init() {};
 
 function update(dTime){
     playa.update(dTime);
