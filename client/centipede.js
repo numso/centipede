@@ -1,6 +1,7 @@
 var NUM_PIECES = 12;
 
-var shrooms = require('./shrooms');
+var shrooms = require('./shrooms')
+  , scorpio = require('./scorpion');
 
 var peed = [];
 
@@ -9,21 +10,28 @@ function init() {
 
   for (var i = 0; i < NUM_PIECES; ++i) {
     peed.push({
-      isHead: (i === 0),
+      isHead:    (i === 0),
       goingLeft: true,
-      x: 300 + i * 16,
-      y: 0,
-      width:  16,
-      height: 20,
-      dx: -.1,
-      dy: 0,
-      next: 0
+      x:         300 + i * 16,
+      y:         0,
+      width:     16,
+      height:    20,
+      dx:        -.1,
+      dy:        0,
+      next:      0,
+      state:     0,
+      animTime:  0
     });
   }
 }
 
 function update(dTime) {
   for (var i = 0; i < peed.length; ++i) {
+    peed[i].animTime += dTime;
+    if (peed[i].animTime >= 50) {
+      peed[i].animTime = 0;
+      peed[i].state = (peed[i].state + 1) % 3;
+    }
 
     if (peed[i].dy !== 0) { // moving down
       peed[i].y += peed[i].dy * dTime;
@@ -76,7 +84,7 @@ function hitWall(i) {
 
 function render(ctx, g) {
   for (var i = 0; i < peed.length; ++i)
-    g.drawPeed(ctx, peed[i].isHead, peed[i].goingLeft, peed[i].x, peed[i].y);
+    g.drawPeed(ctx, peed[i].isHead, peed[i].goingLeft, peed[i].x, peed[i].y, peed[i].state);
 }
 
 exports.init = init;
@@ -94,6 +102,7 @@ exports.killPiece = function (ind) {
 
   if (peed.length === 0) {
     init();
+    scorpio.init();
   }
 };
 
