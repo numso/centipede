@@ -13,6 +13,7 @@
     "browserijade": "~0.5.7",
     "browserify": "~1.17.2",
     "sleep": "~1.1.0",
-    "waitress": "~0.1.2"
+    "waitress": "~0.1.2",
+    "socket.io": "~0.9.13"
   }
 }

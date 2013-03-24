@@ -1,0 +1,33 @@
+extends ../layout
+
+append styles
+  meta(name="viewport", content="width=device-width, user-scalable=no")
+  style
+    body {
+      background-color: white;
+    }
+
+block content
+  .controller
+    .setup
+      div
+        input(type='text', placeholder='Nickname', value=user.name).nickname
+      div
+        input(type='text', placeholder='Game ID', value=code).gameCode
+      div
+        input(type='submit', value='Enter').enterGame
+      .msg
+    .loading
+      p LOADING THE GAME
+
+    .controls
+      img(src='/img/c/button.jpg').buttonn
+      img(src='/img/c/analog1.png').analog1
+      img(src='/img/c/analog2.png').analog2
+
+    .error
+      p Game Disconnected
+      p Refresh and try again
+
+append scripts
+  script(src='/js/miniapp.js')

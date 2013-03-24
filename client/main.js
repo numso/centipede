@@ -1,5 +1,7 @@
 window.require = require;
 
+var socket = io.connect();
+
 var jadify = require('./requires/render')
   , shared = require('./shared')
   , g      = require('./graphics')
@@ -16,6 +18,41 @@ var states = {
 };
 
 var lastTime, ctx;
+
+socket.emit('newGame', {}, function (data) {
+  states.settings.createQR(data);
+});
+
+socket.on('playerConnected', function (data) {
+  shared.netPlayers[data.player] = {
+    x: 0,
+    y: 0,
+    width: 30,
+    height: 50,
+    dx: 0,
+    dy: 0,
+    fire: false,
+    fireCount: 400,
+    dead: true
+  };
+});
+
+socket.on('playerDisconnected', function (data) {
+  delete shared.netPlayers[data.player];
+});
+
+socket.on('pressedButton', function (data) {
+  if (shared.netPlayers[data.player].dead) return;
+  if (data.val === 'shoot') {
+    shared.netPlayers[data.player].fire = true;
+  } else if (data.val === 'stop') {
+    shared.netPlayers[data.player].dx = 0;
+    shared.netPlayers[data.player].dy = 0;
+  } else {
+    shared.netPlayers[data.player].dx = -data.x;
+    shared.netPlayers[data.player].dy = -data.y;
+  }
+});
 
 function init() {
   window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (cb) { window.setTimeout(cb, 1000 / 60); };
