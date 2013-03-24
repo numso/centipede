@@ -21,7 +21,7 @@ function start() {
 function update(dTime) {
   attractTimer += dTime;
 
-  if (attractTimer >= 15000) {
+  if (attractTimer >= 10000) {
     game.attract(true);
     shared.setState(game);
   }
