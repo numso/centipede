@@ -3,13 +3,9 @@ var bullets   = require('./bullets');
 var inp       = require('./input');
 var snd       = require('./sounds');
 var scores    = require('./states/scores');
-<<<<<<< HEAD
-var game      = require('./states/game');
-=======
 var menu      = require('./states/menu');
 var shared    = require('./shared');
 var peed      = require('./centipede').getPeed;
->>>>>>> 1d1e518bfc4ecb2a11b7cf0bd322297c3b020cf5
 
 var player;
 var score = 0;
@@ -20,15 +16,11 @@ var attract = {};
 function init() {
   lives = 3;
   score = 0;
-<<<<<<< HEAD
-  $('.lives').html('Lives: ' + lives);
-  $('.myScore').text(0);
-=======
+  //$('.myScore').text(0);
   lives = 3;
   $('.myScore').text(score);
   $('.lives').html("Lives: " + lives);
   inp.resetKeys();
->>>>>>> 1d1e518bfc4ecb2a11b7cf0bd322297c3b020cf5
 
   player = {
     width: 30,
@@ -116,9 +108,9 @@ function updateAttract(dTime) {
 
 function gameOver(){
     --lives;
+    console.log(lives);
     $('.lives').html("Lives: " + lives);
     if(lives == 0){
-      game.setGameOver();
       scores.checkScore($('.myScore').html(), function (hasScore) {
         if (hasScore) {
           var resp = prompt('Enter your name');
@@ -127,8 +119,6 @@ function gameOver(){
         }
         shared.setState(menu);
       });
-    
-    $('.playAgain').css('visibility', 'visible').click(game.start);
 
     }
 }

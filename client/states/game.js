@@ -20,9 +20,6 @@ var attractMode = false;
 function start() {
   snd.playMusic('game');
 
-  $('.playAgain').css('visibility', 'hidden');
-  gameOver = false;
-
   playa.init();
   spider.init(attractMode);
   scorpion.init();
@@ -58,13 +55,9 @@ function unbindExitHandlers() {
 }
 
 function update(dTime){
-<<<<<<< HEAD
-  if(gameOver)return;
-=======
   if (attractMode)
     playa.attract(dTime);
   else {
->>>>>>> 1d1e518bfc4ecb2a11b7cf0bd322297c3b020cf5
     playa.update(dTime);
     npUpdate(dTime);
   }
@@ -129,13 +122,8 @@ function npUpdate(dTime) {
   }
 }
 
-function setGameOver(){
-  gameOver = true;
-};
-
 exports.start  = start;
 exports.stop   = stop;
-exports.setGameOver = setGameOver;
 exports.update = update;
 exports.render = render;
 exports.init   = init;

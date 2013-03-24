@@ -1,4 +1,4 @@
-var shrooms = ('./require');
+var shrooms = ('./shrooms');
 var flea;
 
 function init(attract) {
@@ -64,15 +64,7 @@ function update(dTime){
       flea.x = Math.floor(Math.random() * (500 - flea.width));
     }
 
-    if(flea.shroomTimer > 20000){
-        ++flea.shroomCount;
-        if(flea.shroomCount > 5){
-            flea.shroomTimer = 0;
-        shrooms.createShroom(Math.floor(flea.x)/20 , Math.floor(flea.y)/20);
-        }
 
-
-    }
   }
 
   // if (flea.visible && flea.hungry >= 5000) {
