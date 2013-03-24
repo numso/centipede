@@ -3,13 +3,16 @@ var bullets   = require('./bullets');
 var inp       = require('./input');
 var snd       = require('./sounds');
 var scores    = require('./states/scores');
+var game      = require('./states/game');
 
 var player;
 var score = 0;
-var lives = 3;
+var lives;
 
 function init() {
+  lives = 3;
   score = 0;
+  $('.lives').html('Lives: ' + lives);
   $('.myScore').text(0);
 
   player = {
@@ -65,7 +68,7 @@ function gameOver(){
     --lives;
     $('.lives').html("Lives: " + lives);
     if(lives == 0){
-        console.log("your in here!");
+      game.setGameOver();
       scores.checkScore($('.myScore').html(), function (hasScore) {
         if (hasScore) {
           var resp = prompt('Enter your name');
@@ -74,6 +77,8 @@ function gameOver(){
           }
         }
       });
+    
+    $('.playAgain').css('visibility', 'visible').click(game.start);
 
     }
 }

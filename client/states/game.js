@@ -12,10 +12,13 @@ var jadify = require('../requires/render')
   , spider = require('../spider')
   , flea = require('../flea')
   ;
-
+var gameOver;
 
 function start() {
   snd.playMusic('game');
+
+  $('.playAgain').css('visibility', 'hidden');
+  gameOver = false;
 
   playa.init();
   spider.init();
@@ -32,6 +35,7 @@ function stop() {
 function init() {};
 
 function update(dTime){
+  if(gameOver)return;
     playa.update(dTime);
     bullets.update(dTime);
     spider.update(dTime);
@@ -53,8 +57,13 @@ function render(ctx){
     flea.render(ctx, g);
 };
 
+function setGameOver(){
+  gameOver = true;
+};
+
 exports.start  = start;
 exports.stop   = stop;
+exports.setGameOver = setGameOver;
 exports.update = update;
 exports.render = render;
 exports.init   = init;
