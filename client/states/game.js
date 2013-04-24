@@ -14,6 +14,7 @@ var jadify    = require('../requires/render')
   , menu      = require('./menu')
   ;
 
+var gameOver;
 var attractMode = false;
 
 function start() {

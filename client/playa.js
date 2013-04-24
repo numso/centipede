@@ -9,12 +9,14 @@ var peed      = require('./centipede').getPeed;
 
 var player;
 var score = 0;
-var lives = 3;
+var lives;
 
 var attract = {};
 
 function init() {
+  lives = 3;
   score = 0;
+  //$('.myScore').text(0);
   lives = 3;
   $('.myScore').text(score);
   $('.lives').html("Lives: " + lives);
@@ -106,9 +108,10 @@ function updateAttract(dTime) {
 
 function gameOver(){
     --lives;
+    console.log(lives);
     $('.lives').html("Lives: " + lives);
     if(lives == 0){
-      scores.checkScore(score, function (hasScore) {
+      scores.checkScore($('.myScore').html(), function (hasScore) {
         if (hasScore) {
           var resp = prompt('Enter your name');
           if (resp && resp !== '')
@@ -116,6 +119,7 @@ function gameOver(){
         }
         shared.setState(menu);
       });
+
     }
 }
 

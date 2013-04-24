@@ -1,9 +1,13 @@
+var shrooms = ('./shrooms');
 var flea;
+
 function init(attract) {
     flea = {
         dir: "right",
         visible: true,
         deathTimer: 0,
+        shroomTimer: 0,
+        shroomCount: 0,
         time: 0,
         width: 20,
         height: 20,
@@ -23,6 +27,7 @@ function update(dTime){
   flea.x += flea.dx * dTime;
   flea.y += flea.dy * dTime;
   flea.time += dTime;
+  flea.shroomTimer += dTime;
 
   if (flea.x < 0) {
     flea.x = 0;
@@ -58,6 +63,8 @@ function update(dTime){
       flea.y = 350;
       flea.x = Math.floor(Math.random() * (500 - flea.width));
     }
+
+
   }
 
   // if (flea.visible && flea.hungry >= 5000) {
